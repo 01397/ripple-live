@@ -29,6 +29,7 @@ export class SkywayService {
   public localState = new BehaviorSubject<LocalMediaState>({ audio: true, video: true, screen: false })
   public isConnected = false
   public localStreamUpdate = new Subject<MediaStream>()
+  public focusUpdate = new Subject<MediaStream>()
   private removeScreenStreamShareEventListener: (() => void) | null = null
 
   constructor() {
@@ -104,7 +105,7 @@ export class SkywayService {
     const localStream = await navigator.mediaDevices
       .getUserMedia({
         audio: true,
-        video: true,
+        video: { width: 640, height: 360 },
       })
       .catch(console.error)
     if (!localStream) return
@@ -137,52 +138,26 @@ export class SkywayService {
     this.room.on('stream', async stream => {
       this.users.push({
         // @ts-ignore
-        peerId: stream.peerId + '',
+        id: stream.peerId + '',
         // @ts-ignore
         stream,
       })
       this.usersSubject.next(this.users)
       console.log(this.users)
-      /*
-      const element = document.createElement('video')
-      element.classList.add('remote-video')
-      element.srcObject = stream
-      element.playsInline = true
-      // @ts-ignore
-      element.setAttribute('data-peer-id', stream.peerId)
-      remoteVideos.append(element)
-      await element.play().catch(console.error)
-      */
     })
 
     // 誰かが離脱
     this.room.on('peerLeave', peerId => {
+      console.log(`=== ${peerId} left ===`)
       const index = this.users.findIndex(v => v.id === peerId)
       delete this.users[index]
+      this.users.splice(index, 1)
       this.usersSubject.next(this.users)
-      /*
-      const remoteVideo = remoteVideos.querySelector(`[data-peer-id=${peerId}]`) as HTMLVideoElement
-      if (!remoteVideo || !remoteVideo.srcObject || !(remoteVideo.srcObject instanceof MediaStream)) return
-      remoteVideo.srcObject.getTracks().forEach(track => track.stop())
-      remoteVideo.srcObject = null
-      remoteVideo.remove()
-      console.log(`=== ${peerId} left ===`)
-      */
     })
 
     // 自分が離脱
     this.room.once('close', () => {
       this.isConnected = false
-      /*
-      sendTrigger.removeEventListener('click', this.sendMessage)
-      console.log('== You left ===')
-      Array.from(remoteVideos.children).forEach(remoteVideo => {
-        if (!remoteVideo || !remoteVideo.srcObject || !(remoteVideo.srcObject instanceof MediaStream)) return
-        remoteVideo.srcObject.getTracks().forEach(track => track.stop())
-        remoteVideo.srcObject = null
-        remoteVideo.remove()
-      })
-      */
     })
 
     // 他人からのメッセージ

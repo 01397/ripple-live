@@ -1,10 +1,22 @@
 <app-sidebar class="sidebar"></app-sidebar>
 <div class="main">
-  <div class="video-container">
-    
+  <div class="main-video-container">
+    <app-video
+      [stream]="users[focusIndex].stream"
+      [focused]="true"
+      class="main-video"
+      *ngIf="users.length !== 0"
+    ></app-video>
   </div>
-  <ng-container *ngFor="let user of users">
-    {{ user.id }}
-    <app-video [stream]="user.stream" class="remote-video"></app-video>
-  </ng-container>
+  <div class="bottom-video-list">
+    <div
+      *ngFor="let user of users; let i = index"
+      class="bottom-video-container"
+      (click)="setFocus(i)"
+      [class.active]="i === focusIndex"
+    >
+      <app-video [stream]="user.stream" class="bottom-video"></app-video>
+      <div class="bottom-label">{{ user.id }}</div>
+    </div>
+  </div>
 </div>

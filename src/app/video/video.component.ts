@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core'
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core'
 import { SkywayService } from '../skyway.service'
 
 @Component({
@@ -9,10 +9,11 @@ import { SkywayService } from '../skyway.service'
 export class VideoComponent implements AfterViewInit {
   @Input() stream?: MediaStream
   @Input() local: boolean = false
+  @Input() focused: boolean = false
   @Input() label: string = ''
   @ViewChild('video', { static: false }) private video?: ElementRef<HTMLVideoElement>
 
-  constructor(private skyway: SkywayService) {}
+  constructor(private skyway: SkywayService, private changeDetector: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     console.info(this.video)
@@ -25,6 +26,12 @@ export class VideoComponent implements AfterViewInit {
     element.play()
     if (this.local === true) {
       this.skyway.localStreamUpdate.subscribe(stream => {
+        element.pause()
+        element.srcObject = stream
+        element.play()
+      })
+    } else if (this.focused === true) {
+      this.skyway.focusUpdate.subscribe(stream => {
         element.pause()
         element.srcObject = stream
         element.play()

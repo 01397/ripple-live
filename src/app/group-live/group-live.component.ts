@@ -8,6 +8,7 @@ import { SkywayService, User } from '../skyway.service'
 })
 export class GroupLiveComponent implements OnInit {
   public users: User[] = []
+  public focusIndex: number = 0
   public tests = [{ id: 1 }, { id: 2 }, { id: 7 }]
   constructor(public skyway: SkywayService, private changeDetector: ChangeDetectorRef) {}
 
@@ -21,5 +22,10 @@ export class GroupLiveComponent implements OnInit {
   }
   add() {
     this.tests.push({ id: 30 })
+  }
+  setFocus(index: number) {
+    this.focusIndex = index
+    this.skyway.focusUpdate.next(this.users[index].stream)
+    this.changeDetector.detectChanges()
   }
 }
