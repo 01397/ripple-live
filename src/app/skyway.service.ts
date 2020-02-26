@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, of, Subject } from 'rxjs'
 import Peer, { SfuRoom } from 'skyway-js'
 import { Stream } from 'stream'
+import { AngularFirestore } from '@angular/fire/firestore'
 
 export interface User {
   id: string
@@ -31,8 +32,9 @@ export class SkywayService {
   public localStreamUpdate = new Subject<MediaStream>()
   public focusUpdate = new Subject<MediaStream>()
   private removeScreenStreamShareEventListener: (() => void) | null = null
+  peerUserList: unknown
 
-  constructor() {
+  constructor(private db: AngularFirestore) {
     this.peer = new Peer({
       key: '9fa5a062-8447-46df-b6aa-86752eec9bd0',
       debug: 3,
@@ -163,6 +165,14 @@ export class SkywayService {
     // 他人からのメッセージ
     this.room.on('data', ({ data, src }) => {
       console.log(`${src}: ${data}`)
+    })
+
+    const userDoc = this.db.doc<{ [peerId in string]: string }>('config/users')
+    userDoc.update({
+      [this.peer.id]: this.metadata.name,
+    })
+    userDoc.valueChanges().subscribe(users => {
+      this.peerUserList = users
     })
   }
 

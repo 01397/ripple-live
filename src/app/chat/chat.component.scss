@@ -1,0 +1,25 @@
+.post {
+  padding: 0.5em 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  padding: 0.5em 0;
+  margin: 0 0.5em;
+  border-bottom: 1px solid #fff2;
+}
+.post-timestamp {
+  grid-row: 1;
+  grid-column: 1;
+  color: #fff8;
+}
+.post-name {
+  grid-row: 1;
+  grid-column: 2;
+  color: #fff8;
+  margin-left: 0.5em;
+  font-weight: bold;
+}
+.post-body {
+  font-size: 1.1em;
+  grid-row: 2;
+  grid-column: 1 / 3;
+}

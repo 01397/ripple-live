@@ -1,13 +1,18 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser'
+import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 
-import { AppComponent } from './app.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { VideoComponent } from './video/video.component';
-import { GroupLiveComponent } from './group-live/group-live.component';
-import { CommonModule } from '@angular/common';
-import { StartComponent } from './start/start.component';
+import { AppComponent } from './app.component'
+import { SidebarComponent } from './sidebar/sidebar.component'
+import { VideoComponent } from './video/video.component'
+import { GroupLiveComponent } from './group-live/group-live.component'
+import { CommonModule } from '@angular/common'
+import { StartComponent } from './start/start.component'
+import { ChatComponent } from './chat/chat.component'
+import { CommentDatePipe } from './comment-date.pipe'
+import { AngularFireModule } from '@angular/fire'
+import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore'
+import { environment } from 'src/environments/environment'
 
 @NgModule({
   declarations: [
@@ -15,14 +20,12 @@ import { StartComponent } from './start/start.component';
     SidebarComponent,
     VideoComponent,
     GroupLiveComponent,
-    StartComponent
+    StartComponent,
+    ChatComponent,
+    CommentDatePipe,
   ],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    FormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, CommonModule, FormsModule, AngularFireModule.initializeApp(environment.firebaseConfig)],
+  providers: [AngularFirestore],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

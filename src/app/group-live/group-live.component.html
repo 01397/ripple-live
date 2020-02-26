@@ -16,7 +16,7 @@
       [class.active]="i === focusIndex"
     >
       <app-video [stream]="user.stream" class="bottom-video"></app-video>
-      <div class="bottom-label">{{ user.id }}</div>
+      <div class="bottom-label">{{ skyway.peerUserList[user.id] }}</div>
     </div>
   </div>
 </div>
