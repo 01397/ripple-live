@@ -7,20 +7,28 @@ import { SkywayService } from '../skyway.service'
   styleUrls: ['./video.component.scss'],
 })
 export class VideoComponent implements AfterViewInit {
-  @Input() id: string = ''
+  @Input() stream?: MediaStream
+  @Input() local: boolean = false
+  @Input() label: string = ''
   @ViewChild('video', { static: false }) private video?: ElementRef<HTMLVideoElement>
 
   constructor(private skyway: SkywayService) {}
 
   ngAfterViewInit() {
     console.info(this.video)
-    console.info(this.skyway.users)
-    if (!this.video) return
+    if (!this.video || !this.stream) return
     const element = this.video.nativeElement
-    element.muted = true
+    element.muted = false
     // @ts-ignore
     element.playsInline = true
-    element.srcObject = this.skyway.users[this.id].stream
-    element.play().catch(console.error)
+    element.srcObject = this.stream
+    element.play()
+    if (this.local === true) {
+      this.skyway.localStreamUpdate.subscribe(stream => {
+        element.pause()
+        element.srcObject = stream
+        element.play()
+      })
+    }
   }
 }

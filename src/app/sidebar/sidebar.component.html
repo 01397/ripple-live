@@ -1,6 +1,20 @@
-<button (click)="join()"></button>
+<div class="logo">
+  <img src="../../assets/images/logo.svg" />
+</div>
+<div class="info">
+  <div>{{ skyway.metadata.name }}</div>
+  <div>{{ skyway.metadata.class }} 時間目</div>
+  <div>{{ skyway.metadata.table }} グループ</div>
+</div>
+<div class="chat"></div>
 <div class="local-controller">
   <button [class.active]="localState.audio" (click)="toggleLocalAudio()">Audio</button>
   <button [class.active]="localState.video" (click)="toggleLocalVideo()">Video</button>
+  <button [class.active]="localState.screen" (click)="toggleScreenShare()">screen</button>
 </div>
-<app-video [id]="'local'" *ngIf="skyway.users.local" class="video"></app-video>
+<app-video
+  [stream]="skyway.getLocalUser()!.stream"
+  [local]="true"
+  *ngIf="skyway.getLocalUser()"
+  class="video"
+></app-video>

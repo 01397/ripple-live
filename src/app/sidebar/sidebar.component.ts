@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { SkywayService, LocalMediaState } from '../skyway.service'
+import { SkywayService, LocalMediaState, User } from '../skyway.service'
 
 @Component({
   selector: 'app-sidebar',
@@ -7,7 +7,8 @@ import { SkywayService, LocalMediaState } from '../skyway.service'
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  public localState: LocalMediaState = { audio: false, video: false }
+  public localState: LocalMediaState = { audio: false, video: false, screen: false }
+  public stream: MediaStream | null = null
 
   constructor(public skyway: SkywayService) {}
 
@@ -16,14 +17,13 @@ export class SidebarComponent implements OnInit {
       this.localState = localState
     })
   }
-
-  join() {
-    this.skyway.join('test-room')
-  }
   toggleLocalAudio() {
     this.skyway.toggleLocalAudio()
   }
   toggleLocalVideo() {
     this.skyway.toggleLocalVideo()
+  }
+  toggleScreenShare() {
+    this.skyway.toggleScreenShare()
   }
 }

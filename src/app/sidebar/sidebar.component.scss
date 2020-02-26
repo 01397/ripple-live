@@ -1,10 +1,33 @@
 :host {
   display: flex;
   flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .video {
   width: 100%;
 }
+.chat {
+  flex: 1;
+}
+.local-controller {
+  display: flex;
+}
+button {
+  appearance: none;
+  height: 36px;
+  text-align: center;
+  margin: 0 4px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  background-color: transparent;
+  flex: 1;
+  border-radius: 18px;
+}
+button:hover {
+  background-color: rgba($color: #ffffff, $alpha: 0.1);
+  color: #fff;
+}
 button.active {
-  background-color: #f88;
+  background-color: rgba(255, 255, 255, 0.75);
+  color: #000;
 }

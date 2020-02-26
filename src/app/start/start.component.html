@@ -1,0 +1,37 @@
+<div class="container">
+  <img src="../../assets/images/logo.svg" class="logo" />
+  <ng-container [ngSwitch]="progress">
+    <div *ngSwitchCase="0">
+      <div class="header">
+        参加する授業を教えてください。
+      </div>
+      <div class="content">
+        <div><button class="button" (click)="selectClass(1)">1時間目</button></div>
+        <div><button class="button" (click)="selectClass(2)">2時間目</button></div>
+      </div>
+    </div>
+    <div *ngSwitchCase="1">
+      <div class="header">
+        参加者名を教えてください。
+      </div>
+      <div class="content">
+        <input type="text" #name />
+        <button class="button" (click)="setName(name.value)">次へ</button>
+      </div>
+    </div>
+    <div *ngSwitchCase="2">
+      <div class="header">
+        どのグループに参加しますか。
+      </div>
+      <div class="table-list">
+        <button *ngFor="let table of tables" (click)="selectTable(table)" class="button">{{ table }}</button>
+      </div>
+    </div>
+    <div *ngSwitchCase="3">
+      <div class="header">
+        カメラとマイクを使用して、リモート授業に参加します。
+      </div>
+      <button (click)="next()" class="button">授業に参加</button>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,6 @@
+{
+  "hosting": {
+    "public": "dist/ripple-live",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}

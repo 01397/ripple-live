@@ -1,0 +1,10 @@
+<app-sidebar class="sidebar"></app-sidebar>
+<div class="main">
+  <div class="video-container">
+    
+  </div>
+  <ng-container *ngFor="let user of users">
+    {{ user.id }}
+    <app-video [stream]="user.stream" class="remote-video"></app-video>
+  </ng-container>
+</div>

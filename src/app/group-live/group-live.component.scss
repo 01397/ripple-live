@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+}
+.logo {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+}
+.sidebar {
+  width: 300px;
+}
+.remote-video {
+  width: 80%;
+}
+.video-container {
+  justify-self: flex-end;
+  width: 100%;
+  overflow-x: scroll;
+}

@@ -1,3 +1,4 @@
-<div class="main">
-  <app-sidebar class="sidebar"></app-sidebar>
-</div>
+<ng-container [ngSwitch]="system.screen">
+  <app-start class="main" *ngSwitchCase="'start'"></app-start>
+  <app-group-live class="main" *ngSwitchCase="'main'"></app-group-live>
+</ng-container>
