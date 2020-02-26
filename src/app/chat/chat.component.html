@@ -1,8 +1,11 @@
-<div class="post" *ngFor="let post of posts | async">
-  <div class="post-timestamp">{{ post.timestamp | commentDate }}</div>
-  <div class="post-name">{{ post.name }}</div>
-  <div class="post-body">{{ post.body }}</div>
+<div class="post-container" #postContainer>
+  <div class="post" *ngFor="let post of posts | async" [class.weak]="post.level === 0">
+    <div class="post-timestamp">{{ post.timestamp | commentDate }}</div>
+    <div class="post-name">{{ post.name }}</div>
+    <div class="post-body">{{ post.body }}</div>
+  </div>
 </div>
 <div class="form">
-  <input type="text" class="form-field" #field><div class="form-send" (click)="addItem(field.value)">送信</div>
+  <input type="text" class="form-field" #field />
+  <div class="form-send" (click)="addItem(field.value)">送信</div>
 </div>

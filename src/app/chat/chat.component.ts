@@ -1,4 +1,4 @@
-import { Component, OnInit, PipeTransform, Pipe } from '@angular/core'
+import { Component, OnInit, PipeTransform, Pipe, ElementRef, ViewChild } from '@angular/core'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
 import { SkywayService } from '../skyway.service'
 import { firestore } from 'firebase'
@@ -21,6 +21,7 @@ export class ChatComponent implements OnInit {
   public postCollection: AngularFirestoreCollection<Post>
   public posts: Observable<Post[]>
   private group: string
+  @ViewChild('postContainer', { static: false }) private chatContainer?: ElementRef<HTMLDivElement>
 
   constructor(private db: AngularFirestore, private skyway: SkywayService) {
     this.group = `c${this.skyway.metadata.class}-t${this.skyway.metadata.table}`
@@ -31,6 +32,13 @@ export class ChatComponent implements OnInit {
         .limit(100)
     )
     this.posts = this.postCollection.valueChanges()
+    this.posts.subscribe(() => {
+      setTimeout(() => {
+        if (!this.chatContainer) return
+        const element = this.chatContainer.nativeElement
+        element.scrollTop = element.scrollHeight
+      }, 200)
+    })
   }
   addItem(body: string) {
     const id = this.db.createId()
@@ -43,7 +51,7 @@ export class ChatComponent implements OnInit {
     }
     this.postCollection.doc(id).set(post)
   }
-  join(body: string) {
+  join() {
     const id = this.db.createId()
     const post: Post = {
       name: this.skyway.metadata.name,
@@ -54,5 +62,7 @@ export class ChatComponent implements OnInit {
     }
     this.postCollection.doc(id).set(post)
   }
-  ngOnInit() {}
+  ngOnInit() {
+    this.join()
+  }
 }

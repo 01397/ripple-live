@@ -72,18 +72,35 @@ export class SkywayService {
 
   enterScreenShare() {
     if (!this.localUser) return
-    // @ts-ignore
-    navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then((stream: MediaStream) => {
+
+    navigator.mediaDevices
       // @ts-ignore
-      this.localUser.stream = stream
-      // @ts-ignore
-      this.room.replaceStream(stream)
-      this.localStreamUpdate.next(stream)
-      this.localState.next({ audio: this.localState.value.audio, video: true, screen: true })
-      const func = () => this.exitScreenShare()
-      stream.addEventListener('inactive', func)
-      this.removeScreenStreamShareEventListener = () => stream.removeEventListener('inactive', func)
-    })
+      .getDisplayMedia({
+        width: {
+          min: 320,
+          max: 1280,
+        },
+        height: {
+          min: 240,
+          max: 720,
+        },
+        // @ts-ignore
+        frameRate: {
+          min: 1,
+          max: 10,
+        },
+      })
+      .then((stream: MediaStream) => {
+        // @ts-ignore
+        this.localUser.stream = stream
+        // @ts-ignore
+        this.room.replaceStream(stream)
+        this.localStreamUpdate.next(stream)
+        this.localState.next({ audio: this.localState.value.audio, video: true, screen: true })
+        const func = () => this.exitScreenShare()
+        stream.addEventListener('inactive', func)
+        this.removeScreenStreamShareEventListener = () => stream.removeEventListener('inactive', func)
+      })
   }
   exitScreenShare() {
     console.log('stop caputuring screen')
@@ -108,6 +125,11 @@ export class SkywayService {
       .getUserMedia({
         audio: true,
         video: { width: 640, height: 360 },
+        // @ts-ignore
+        frameRate: {
+          min: 1,
+          max: 10,
+        },
       })
       .catch(console.error)
     if (!localStream) return
