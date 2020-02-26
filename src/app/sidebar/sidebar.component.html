@@ -1,0 +1,6 @@
+<button (click)="join()"></button>
+<div class="local-controller">
+  <button [class.active]="localState.audio" (click)="toggleLocalAudio()">Audio</button>
+  <button [class.active]="localState.video" (click)="toggleLocalVideo()">Video</button>
+</div>
+<app-video [id]="'local'" *ngIf="skyway.users.local" class="video"></app-video>
