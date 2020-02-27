@@ -17,6 +17,12 @@ export class StartComponent implements OnInit {
   constructor(private skyway: SkywayService, public system: SystemService) {}
 
   ngOnInit() {
+    const name = localStorage.getItem('userName')
+    if (name !== null) {
+      this.name = name
+    }
+    console.log(name)
+    console.log(this.name)
     this.version = this.system.version
     if (this.skyway.metadata.name != '') this.progress = 1
   }
@@ -28,12 +34,14 @@ export class StartComponent implements OnInit {
       this.system.screen = 'main'
     }
   }
-  setName(name: string) {
+  setName() {
+    localStorage.setItem('userName', this.name)
     if (name === 'master') {
-      this.setName('全体')
+      this.skyway.setName('全体')
       this.system.screen = 'master'
+      return
     }
-    this.skyway.setName(name)
+    this.skyway.setName(this.name)
     this.next()
   }
   selectClass(i: number) {

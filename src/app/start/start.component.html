@@ -6,8 +6,8 @@
         参加者名を教えてください。(本名,フルネーム)
       </div>
       <div class="content">
-        <input type="text" #name />
-        <button class="button" (click)="setName(name.value)">次へ</button>
+        <input type="text" [(ngModel)]="name" />
+        <button class="button" (click)="setName()">次へ</button>
       </div>
     </div>
     <div *ngSwitchCase="1">
