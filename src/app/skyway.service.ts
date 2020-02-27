@@ -35,7 +35,7 @@ export class SkywayService {
   constructor(private db: AngularFirestore) {
     this.peer = new Peer({
       key: '9fa5a062-8447-46df-b6aa-86752eec9bd0',
-      debug: 3,
+      debug: 0,
       turn: true,
     })
     this.localState.subscribe(state => {

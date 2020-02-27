@@ -23,6 +23,7 @@ export class GroupLiveComponent implements OnInit {
     this.skyway.usersSubject.subscribe(users => {
       console.log(users)
       console.log(`len: ${users.length}`)
+      this.focusIndex = Math.max(0, Math.min(users.length - 1, this.focusIndex))
       this.users = users
       this.changeDetector.detectChanges()
     })
