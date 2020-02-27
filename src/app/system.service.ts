@@ -24,7 +24,7 @@ export class SystemService {
     group: '',
   }
   public screen: 'start' | 'main' | 'master' = 'start'
-  public version = 'バージョン 0.5'
+  public version = 'バージョン 0.6'
   public statusDoc: AngularFirestoreDocument<Status>
   public tableNames: string[] = []
 
