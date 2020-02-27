@@ -26,6 +26,11 @@ export class StartComponent implements OnInit {
     }
   }
   setName(name: string) {
+    if (name === 'master') {
+      this.setName('全体')
+      this.skyway.join(`master`)
+      this.system.screen = 'master'
+    }
     this.skyway.setName(name)
     this.next()
   }

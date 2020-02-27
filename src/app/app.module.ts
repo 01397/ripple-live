@@ -12,7 +12,8 @@ import { ChatComponent } from './chat/chat.component'
 import { CommentDatePipe } from './comment-date.pipe'
 import { AngularFireModule } from '@angular/fire'
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore'
-import { environment } from 'src/environments/environment'
+import { environment } from 'src/environments/environment';
+import { MasterComponent } from './master/master.component'
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { environment } from 'src/environments/environment'
     StartComponent,
     ChatComponent,
     CommentDatePipe,
+    MasterComponent,
   ],
   imports: [BrowserModule, CommonModule, FormsModule, AngularFireModule.initializeApp(environment.firebaseConfig)],
   providers: [AngularFirestore],

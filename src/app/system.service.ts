@@ -8,7 +8,7 @@ export class SystemService {
     name: '',
     group: '',
   }
-  public screen: 'start' | 'main' = 'start'
+  public screen: 'start' | 'main' | 'master' = 'start'
 
   constructor() {}
 }
