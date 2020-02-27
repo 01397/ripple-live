@@ -69,13 +69,13 @@ export class SkywayService {
     }
   }
 
-  enterScreenShare() {
-    if (!this.localUser) return
+  async enterScreenShare() {
+    if (!this.localUser || !this.room) return
 
-    navigator.mediaDevices
+    const screenStream: MediaStream = await navigator.mediaDevices
       // @ts-ignore
       .getDisplayMedia({
-        audio: true,
+        audio: false,
         video: {
           width: {
             max: 1152,
@@ -86,17 +86,23 @@ export class SkywayService {
           frameRate: 10,
         },
       })
-      .then((stream: MediaStream) => {
-        // @ts-ignore
-        this.localUser.stream = stream
-        // @ts-ignore
-        this.room.replaceStream(stream)
-        this.localStreamUpdate.next(stream)
-        this.localState.next({ audio: this.localState.value.audio, video: true, screen: true })
-        const func = () => this.exitScreenShare()
-        stream.addEventListener('inactive', func)
-        this.removeScreenStreamShareEventListener = () => stream.removeEventListener('inactive', func)
-      })
+    const audioStream: MediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false,
+    })
+    audioStream.addTrack(screenStream.getVideoTracks()[0])
+    const stream = audioStream
+    this.localUser.stream = stream
+    this.room.replaceStream(stream)
+    this.localStreamUpdate.next(stream)
+    this.localState.next({
+      audio: this.localState.value.audio,
+      video: true,
+      screen: true,
+    })
+    const func = () => this.exitScreenShare()
+    stream.addEventListener('inactive', func)
+    this.removeScreenStreamShareEventListener = () => stream.removeEventListener('inactive', func)
   }
   exitScreenShare() {
     console.log('stop caputuring screen')

@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit {
       ref
         .where('group', '==', this.group)
         .orderBy('timestamp')
-        .limit(100)
+        .limit(30)
     )
     this.posts = this.postCollection.valueChanges()
     this.posts.subscribe(() => {
