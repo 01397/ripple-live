@@ -23,7 +23,6 @@ export class SkywayService {
   public metadata = { name: '', class: 0, table: 0 }
   public roomId: string = 'test'
   private localUser?: User
-  private localCameraStream?: MediaStream
   private users: User[] = []
   public usersSubject = new BehaviorSubject<User[]>([])
   public localState = new BehaviorSubject<LocalMediaState>({ audio: true, video: true, screen: false })
@@ -54,11 +53,52 @@ export class SkywayService {
       id: 'local',
       stream,
     }
-    this.localCameraStream = stream
   }
 
   getLocalUser() {
     return this.localUser
+  }
+
+  getMediaStream(type: 'audioOnly' | 'webCam' | 'screen'): Promise<MediaStream> {
+    switch (type) {
+      case 'screen':
+        return (
+          navigator.mediaDevices
+            // @ts-ignore
+            .getDisplayMedia({
+              audio: false,
+              video: {
+                width: {
+                  max: 1152,
+                },
+                height: {
+                  max: 648,
+                },
+                frameRate: 10,
+              },
+            })
+        )
+      case 'audioOnly':
+        return navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false,
+        })
+      case 'webCam':
+        return navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: {
+            width: {
+              min: 320,
+              max: 640,
+            },
+            height: {
+              min: 240,
+              max: 360,
+            },
+            frameRate: 10,
+          },
+        })
+    }
   }
 
   toggleScreenShare() {
@@ -71,25 +111,10 @@ export class SkywayService {
 
   async enterScreenShare() {
     if (!this.localUser || !this.room) return
-
-    const screenStream: MediaStream = await navigator.mediaDevices
-      // @ts-ignore
-      .getDisplayMedia({
-        audio: false,
-        video: {
-          width: {
-            max: 1152,
-          },
-          height: {
-            max: 648,
-          },
-          frameRate: 10,
-        },
-      })
-    const audioStream: MediaStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false,
-    })
+    const currentStream = this.localUser.stream
+    currentStream.getTracks().forEach(track => track.stop())
+    const screenStream: MediaStream = await this.getMediaStream('screen')
+    const audioStream: MediaStream = await this.getMediaStream('audioOnly')
     audioStream.addTrack(screenStream.getVideoTracks()[0])
     const stream = audioStream
     this.localUser.stream = stream
@@ -102,18 +127,22 @@ export class SkywayService {
     })
     const func = () => this.exitScreenShare()
     stream.addEventListener('inactive', func)
-    this.removeScreenStreamShareEventListener = () => stream.removeEventListener('inactive', func)
+    stream.getVideoTracks()[0].addEventListener('ended', func)
+    this.removeScreenStreamShareEventListener = () => {
+      stream.removeEventListener('inactive', func)
+      stream.getVideoTracks()[0].removeEventListener('ended', func)
+    }
   }
-  exitScreenShare() {
+  async exitScreenShare() {
     console.log('stop caputuring screen')
-    if (!this.room || !this.localUser || !this.localCameraStream) return
+    if (!this.room || !this.localUser) return
     const screenStream = this.localUser.stream
     screenStream.getTracks().forEach(track => track.stop())
     if (this.removeScreenStreamShareEventListener) {
       this.removeScreenStreamShareEventListener()
       this.removeScreenStreamShareEventListener = null
     }
-    const stream = this.localCameraStream
+    const stream = await this.getMediaStream('webCam')
     this.localUser.stream = stream
     this.room.replaceStream(stream)
     this.localStreamUpdate.next(stream)
@@ -123,22 +152,7 @@ export class SkywayService {
   async join(roomId: string) {
     this.roomId = roomId
     console.log(roomId)
-    const localStream = await navigator.mediaDevices
-      .getUserMedia({
-        audio: true,
-        video: {
-          width: {
-            min: 320,
-            max: 640,
-          },
-          height: {
-            min: 240,
-            max: 360,
-          },
-          frameRate: 10,
-        },
-      })
-      .catch(console.error)
+    const localStream = await this.getMediaStream('webCam')
     if (!localStream) return
     this.setLocalStream(localStream)
 
