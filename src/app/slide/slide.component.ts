@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, SecurityContext } from '@angular/core'
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser'
 import { firestore } from 'firebase'
 import { AngularFirestore } from '@angular/fire/firestore'
@@ -10,14 +10,18 @@ import { Status } from '../system.service'
   styleUrls: ['./slide.component.scss'],
 })
 export class SlideComponent implements OnInit {
-  public source: SafeUrl = ''
+  public source: string = ''
 
   constructor(private db: AngularFirestore, private sanitizer: DomSanitizer) {
     db.doc<Status>('config/status')
       .valueChanges()
       .subscribe(status => {
         if (!status || !status.slideURL) return
-        this.source = sanitizer.bypassSecurityTrustResourceUrl(status.slideURL)
+        this.source =
+          this.sanitizer.sanitize(
+            SecurityContext.RESOURCE_URL,
+            sanitizer.bypassSecurityTrustResourceUrl(status.slideURL)
+          ) || ''
       })
   }
 
