@@ -44,7 +44,7 @@ export class SkywayService {
       const vt = this.localUser.stream.getVideoTracks()
       if (vt[0]) vt[0].enabled = state.video
       const at = this.localUser.stream.getAudioTracks()
-      if (at[0]) at[0].enabled = state.video
+      if (at[0]) at[0].enabled = state.audio
     })
   }
 
