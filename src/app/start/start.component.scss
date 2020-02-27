@@ -49,3 +49,12 @@ input {
   width: 30%;
   margin: 16px 0;
 }
+.version {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  color: #ffffff;
+  opacity: 0.5;
+  user-select: none;
+  pointer-events: none;
+}

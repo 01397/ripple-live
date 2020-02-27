@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+}
+.left {
+  width: 300px;
+}
+.right {
+  flex: 1;
+  background-color: #ff8888;
+  margin: 16px;
+}

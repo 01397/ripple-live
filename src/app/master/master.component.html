@@ -1,0 +1,10 @@
+<div class="left">
+  <h3>Youtubeの固定表示</h3>
+  <button (click)="updateYtliveStatus('full')" [class.selected]="ytlive === 'full'">全画面表示</button>
+  <button (click)="updateYtliveStatus('wipe')" [class.selected]="ytlive === 'wipe'">ワイプ表示</button>
+  <button (click)="updateYtliveStatus('none')" [class.selected]="ytlive === 'none'">OFF</button>
+
+  <h3>Youtube ビデオID</h3>
+  <input type="text" #videoid /><button (click)="updateYoutubeId(videoid.value)">変更する</button>
+</div>
+<app-group-live [master]="true" class="right"></app-group-live>

@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core'
-import Peer, { SfuRoom } from 'skyway-js'
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core'
+import { SkywayService, User } from '../skyway.service'
+import { AngularFireModule } from '@angular/fire'
+import { SystemService, Status } from '../system.service'
 
 @Component({
   selector: 'app-master',
@@ -7,12 +9,26 @@ import Peer, { SfuRoom } from 'skyway-js'
   styleUrls: ['./master.component.scss'],
 })
 export class MasterComponent implements OnInit {
-  constructor() {}
+  public slide: Status['style']['slide'] = 'none'
+  public ytlive: Status['style']['ytlive'] = 'full'
+  constructor(private system: SystemService) {}
 
   ngOnInit() {
-    this.init()
+    this.system.statusDoc.valueChanges().subscribe(status => {
+      if (!status) return
+      this.slide = status.style.slide
+      this.ytlive = status.style.ytlive
+    })
   }
-  async init() {
-    
+  updateSlideStatus(value: Status['style']['slide']) {
+    this.slide = value
+    this.system.statusDoc.update({ style: { slide: value, ytlive: this.ytlive } })
+  }
+  updateYtliveStatus(value: Status['style']['ytlive']) {
+    this.ytlive = value
+    this.system.statusDoc.update({ style: { slide: this.slide, ytlive: value } })
+  }
+  updateYoutubeId(id: string) {
+    this.system.statusDoc.update({ ytid: id })
   }
 }

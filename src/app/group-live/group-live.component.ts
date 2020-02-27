@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core'
 import { SkywayService, User } from '../skyway.service'
+import { SystemService, Status } from '../system.service'
 
 @Component({
   selector: 'app-group-live',
@@ -7,11 +8,16 @@ import { SkywayService, User } from '../skyway.service'
   styleUrls: ['./group-live.component.scss'],
 })
 export class GroupLiveComponent implements OnInit {
+  @Input() master: boolean = false
   public users: User[] = []
   public focusIndex: number = 0
-  public tests = [{ id: 1 }, { id: 2 }, { id: 7 }]
   public sidebarOpened: boolean = true
-  constructor(public skyway: SkywayService, private changeDetector: ChangeDetectorRef) {}
+  public displayStyle: Status['style'] = {
+    slide: 'none',
+    ytlive: 'none',
+  }
+  public videoid: string | null = ''
+  constructor(public skyway: SkywayService, public system: SystemService, private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.skyway.usersSubject.subscribe(users => {
@@ -20,9 +26,12 @@ export class GroupLiveComponent implements OnInit {
       this.users = users
       this.changeDetector.detectChanges()
     })
-  }
-  add() {
-    this.tests.push({ id: 30 })
+    this.system.statusDoc.valueChanges().subscribe(status => {
+      if (!status) return
+      this.displayStyle = status.style
+      this.videoid = status.ytid
+      this.changeDetector.detectChanges()
+    })
   }
   setFocus(index: number) {
     this.focusIndex = index

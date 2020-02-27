@@ -9,26 +9,28 @@ import { SystemService } from '../system.service'
 })
 export class StartComponent implements OnInit {
   public name: string = ''
-  private table: string = ''
+  private tableId: number = 0
   private class: string = ''
   public progress = 0
-  public tables = ['張', '鄭', '郭', '藤田', '志田', '岡崎', '甲斐', '武田']
+  public version = ''
 
-  constructor(private skyway: SkywayService, private system: SystemService) {}
+  constructor(private skyway: SkywayService, public system: SystemService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.version = this.system.version
+    if (this.skyway.metadata.name != '') this.progress = 1
+  }
 
   next() {
     this.progress++
     if (this.progress >= 4) {
-      this.skyway.join(`c${this.class}-t${this.table}`)
+      this.skyway.join(`c${this.class}-t${this.tableId}`)
       this.system.screen = 'main'
     }
   }
   setName(name: string) {
     if (name === 'master') {
       this.setName('全体')
-      this.skyway.join(`master`)
       this.system.screen = 'master'
     }
     this.skyway.setName(name)
@@ -39,9 +41,9 @@ export class StartComponent implements OnInit {
     this.class = '' + i
     this.next()
   }
-  selectTable(table: string) {
-    this.skyway.setTable(table)
-    this.table = table
+  selectTable(tableId: number) {
+    this.skyway.setTable(tableId)
+    this.tableId = tableId
     this.next()
   }
 }

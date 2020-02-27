@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, of, Subject } from 'rxjs'
 import Peer, { SfuRoom } from 'skyway-js'
-import { Stream } from 'stream'
 import { AngularFirestore } from '@angular/fire/firestore'
 
 export interface User {
@@ -21,7 +20,7 @@ export class SkywayService {
   private peer: Peer | null = null
   private room: SfuRoom | null = null
   private ROOM_MODE: 'sfu' | 'mesh' = 'sfu'
-  public metadata = { name: '', class: 0, table: '' }
+  public metadata = { name: '', class: 0, table: 0 }
   public roomId: string = 'test'
   private localUser?: User
   private localCameraStream?: MediaStream
@@ -197,6 +196,10 @@ export class SkywayService {
       this.peerUserList = users || {}
     })
   }
+  exitRoom() {
+    if (!this.room) return
+    this.room.close()
+  }
 
   sendMessage(message: string) {
     if (this.room === null || this.peer === null) return
@@ -222,7 +225,7 @@ export class SkywayService {
   setClass(cl: number) {
     this.metadata.class = cl
   }
-  setTable(table: string) {
+  setTable(table: number) {
     this.metadata.table = table
   }
 }

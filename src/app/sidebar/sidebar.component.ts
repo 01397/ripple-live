@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { SkywayService, LocalMediaState, User } from '../skyway.service'
+import { SystemService } from '../system.service'
 
 @Component({
   selector: 'app-sidebar',
@@ -10,7 +11,7 @@ export class SidebarComponent implements OnInit {
   public localState: LocalMediaState = { audio: false, video: false, screen: false }
   public stream: MediaStream | null = null
 
-  constructor(public skyway: SkywayService) {}
+  constructor(public skyway: SkywayService, public system: SystemService) {}
 
   ngOnInit() {
     this.skyway.localState.subscribe(localState => {
@@ -25,5 +26,9 @@ export class SidebarComponent implements OnInit {
   }
   toggleScreenShare() {
     this.skyway.toggleScreenShare()
+  }
+  reselectGroup() {
+    this.system.screen = 'start'
+    this.skyway.exitRoom()
   }
 }

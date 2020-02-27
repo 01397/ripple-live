@@ -1,15 +1,22 @@
-<app-sidebar class="sidebar" [class.opened]="sidebarOpened"></app-sidebar>
-<div class="sidebar-menu" (click)="toggleSidebar()" [class.opened]="sidebarOpened">SIDE</div>
+<app-sidebar *ngIf="!master" class="sidebar" [class.opened]="sidebarOpened"></app-sidebar>
+<div *ngIf="!master" class="sidebar-menu" (click)="toggleSidebar()" [class.opened]="sidebarOpened">SIDE</div>
 <div class="main">
   <div class="main-video-container">
     <app-video
+      *ngIf="users.length !== 0 && displayStyle.ytlive !== 'full' && displayStyle.slide !== 'full'"
       [stream]="users[focusIndex].stream"
       [focused]="true"
       class="main-video"
-      *ngIf="users.length !== 0"
     ></app-video>
+    <app-ytlive
+      class="ytlive"
+      *ngIf="displayStyle.ytlive !== 'none' && videoid !== null"
+      [class.full]="displayStyle.ytlive === 'full'"
+      [class.wipe]="displayStyle.ytlive === 'wipe'"
+      [videoid]="videoid"
+    ></app-ytlive>
   </div>
-  <div class="bottom-video-list">
+  <div *ngIf="!master" class="bottom-video-list">
     <div
       *ngFor="let user of users; let i = index"
       class="bottom-video-container"

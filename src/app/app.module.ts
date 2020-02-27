@@ -13,7 +13,8 @@ import { CommentDatePipe } from './comment-date.pipe'
 import { AngularFireModule } from '@angular/fire'
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore'
 import { environment } from 'src/environments/environment';
-import { MasterComponent } from './master/master.component'
+import { MasterComponent } from './master/master.component';
+import { YtliveComponent } from './ytlive/ytlive.component'
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MasterComponent } from './master/master.component'
     ChatComponent,
     CommentDatePipe,
     MasterComponent,
+    YtliveComponent,
   ],
   imports: [BrowserModule, CommonModule, FormsModule, AngularFireModule.initializeApp(environment.firebaseConfig)],
   providers: [AngularFirestore],

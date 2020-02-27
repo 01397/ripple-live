@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { SkywayService } from '../skyway.service'
 import { firestore } from 'firebase'
 import { Observable } from 'rxjs'
+import { SystemService } from '../system.service'
 
 interface Post {
   name: string
@@ -23,7 +24,7 @@ export class ChatComponent implements OnInit {
   private group: string
   @ViewChild('postContainer', { static: false }) private chatContainer?: ElementRef<HTMLDivElement>
 
-  constructor(private db: AngularFirestore, private skyway: SkywayService) {
+  constructor(private db: AngularFirestore, private skyway: SkywayService, private system: SystemService) {
     this.group = `c${this.skyway.metadata.class}-t${this.skyway.metadata.table}`
     this.postCollection = this.db.collection<Post>('posts', ref =>
       ref
@@ -55,7 +56,7 @@ export class ChatComponent implements OnInit {
     const id = this.db.createId()
     const post: Post = {
       name: this.skyway.metadata.name,
-      body: `${this.skyway.metadata.table}グループに参加しました`,
+      body: `${this.system.tableNames[this.skyway.metadata.table]}グループに参加しました`,
       group: this.group,
       timestamp: firestore.Timestamp.fromDate(new Date()),
       level: 0,
