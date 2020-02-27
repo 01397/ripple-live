@@ -14,7 +14,8 @@ import { AngularFireModule } from '@angular/fire'
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore'
 import { environment } from 'src/environments/environment';
 import { MasterComponent } from './master/master.component';
-import { YtliveComponent } from './ytlive/ytlive.component'
+import { YtliveComponent } from './ytlive/ytlive.component';
+import { SlideComponent } from './slide/slide.component'
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { YtliveComponent } from './ytlive/ytlive.component'
     CommentDatePipe,
     MasterComponent,
     YtliveComponent,
+    SlideComponent,
   ],
   imports: [BrowserModule, CommonModule, FormsModule, AngularFireModule.initializeApp(environment.firebaseConfig)],
   providers: [AngularFirestore],

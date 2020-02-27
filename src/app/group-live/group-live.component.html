@@ -15,6 +15,12 @@
       [class.wipe]="displayStyle.ytlive === 'wipe'"
       [videoid]="videoid"
     ></app-ytlive>
+    <app-slide
+      class="slide"
+      *ngIf="displayStyle.slide !== 'none'"
+      [class.full]="displayStyle.slide === 'full'"
+      [class.wipe]="displayStyle.slide === 'wipe'"
+    ></app-slide>
   </div>
   <div *ngIf="!master" class="bottom-video-list">
     <div
