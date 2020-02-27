@@ -22,6 +22,7 @@ export class ChatComponent implements OnInit {
   public postCollection: AngularFirestoreCollection<Post>
   public posts: Observable<Post[]>
   private group: string
+  public formMessage: string = ''
   @ViewChild('postContainer', { static: false }) private chatContainer?: ElementRef<HTMLDivElement>
 
   constructor(private db: AngularFirestore, private skyway: SkywayService, private system: SystemService) {
@@ -30,7 +31,7 @@ export class ChatComponent implements OnInit {
       ref
         .where('group', '==', this.group)
         .orderBy('timestamp')
-        .limit(30)
+        .limitToLast(15)
     )
     this.posts = this.postCollection.valueChanges()
     this.posts.subscribe(() => {
@@ -41,7 +42,9 @@ export class ChatComponent implements OnInit {
       }, 200)
     })
   }
-  addItem(body: string) {
+  addItem() {
+    const body = this.formMessage
+    this.formMessage = ''
     const id = this.db.createId()
     const post: Post = {
       name: this.skyway.metadata.name,

@@ -6,6 +6,6 @@
   </div>
 </div>
 <div class="form">
-  <input type="text" class="form-field" #field />
-  <div class="form-send" (click)="addItem(field.value)">送信</div>
+  <input type="text" class="form-field" [(ngModel)]="formMessage" />
+  <div class="form-send" (click)="addItem()">送信</div>
 </div>
