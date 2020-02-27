@@ -19,7 +19,7 @@ export class VideoComponent implements AfterViewInit {
     console.info(this.video)
     if (!this.video || !this.stream) return
     const element = this.video.nativeElement
-    element.muted = !this.local
+    element.muted = this.local
     // @ts-ignore
     element.playsInline = true
     element.srcObject = this.stream

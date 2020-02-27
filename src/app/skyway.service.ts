@@ -202,6 +202,7 @@ export class SkywayService {
     if (!this.room) return
     this.room.close()
     this.users = []
+    this.usersSubject.next(this.users)
   }
 
   sendMessage(message: string) {
