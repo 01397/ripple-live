@@ -1,4 +1,5 @@
-<app-sidebar class="sidebar"></app-sidebar>
+<app-sidebar class="sidebar" [class.opened]="sidebarOpened"></app-sidebar>
+<div class="sidebar-menu" (click)="toggleSidebar()" [class.opened]="sidebarOpened">SIDE</div>
 <div class="main">
   <div class="main-video-container">
     <app-video

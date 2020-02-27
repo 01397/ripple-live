@@ -32,7 +32,7 @@ export class SkywayService {
   public localStreamUpdate = new Subject<MediaStream>()
   public focusUpdate = new Subject<MediaStream>()
   private removeScreenStreamShareEventListener: (() => void) | null = null
-  peerUserList: unknown
+  public peerUserList: { [key in string]: string } = {}
 
   constructor(private db: AngularFirestore) {
     this.peer = new Peer({
@@ -194,7 +194,7 @@ export class SkywayService {
       [this.peer.id]: this.metadata.name,
     })
     userDoc.valueChanges().subscribe(users => {
-      this.peerUserList = users
+      this.peerUserList = users || {}
     })
   }
 
