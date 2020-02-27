@@ -3,7 +3,7 @@
   <ng-container [ngSwitch]="progress">
     <div *ngSwitchCase="0">
       <div class="header">
-        参加者名を教えてください。(本名)
+        参加者名を教えてください。(本名,フルネーム)
       </div>
       <div class="content">
         <input type="text" #name />
@@ -24,7 +24,9 @@
         どのグループに参加しますか。
       </div>
       <div class="table-list">
-        <button *ngFor="let table of system.tableNames; let i = index" (click)="selectTable(i)" class="button">{{ table }}</button>
+        <button *ngFor="let table of system.tableNames; let i = index" (click)="selectTable(i)" class="button">
+          {{ table }}
+        </button>
       </div>
     </div>
 

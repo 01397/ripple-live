@@ -75,18 +75,15 @@ export class SkywayService {
     navigator.mediaDevices
       // @ts-ignore
       .getDisplayMedia({
-        width: {
-          min: 320,
-          max: 1280,
-        },
-        height: {
-          min: 240,
-          max: 720,
-        },
-        // @ts-ignore
-        frameRate: {
-          min: 1,
-          max: 10,
+        audio: true,
+        video: {
+          width: {
+            max: 1152,
+          },
+          height: {
+            max: 648,
+          },
+          frameRate: 10,
         },
       })
       .then((stream: MediaStream) => {
@@ -123,11 +120,16 @@ export class SkywayService {
     const localStream = await navigator.mediaDevices
       .getUserMedia({
         audio: true,
-        video: { width: 640, height: 360 },
-        // @ts-ignore
-        frameRate: {
-          min: 1,
-          max: 10,
+        video: {
+          width: {
+            min: 320,
+            max: 640,
+          },
+          height: {
+            min: 240,
+            max: 360,
+          },
+          frameRate: 10,
         },
       })
       .catch(console.error)
