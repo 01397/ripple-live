@@ -1,9 +1,5 @@
 import { Component, OnInit, PipeTransform, Pipe, ElementRef, ViewChild, OnDestroy } from '@angular/core'
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
-import { SkywayService } from '../skyway.service'
-import { firestore } from 'firebase'
 import { Observable, Subject } from 'rxjs'
-import { switchMap } from 'rxjs/operators'
 import { SystemService, Post } from '../system.service'
 
 @Component({
