@@ -16,7 +16,8 @@ import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/da
 import { environment } from 'src/environments/environment'
 import { MasterComponent } from './master/master.component'
 import { YtliveComponent } from './ytlive/ytlive.component'
-import { SlideComponent } from './slide/slide.component'
+import { SlideComponent } from './slide/slide.component';
+import { MembersComponent } from './members/members.component'
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { SlideComponent } from './slide/slide.component'
     MasterComponent,
     YtliveComponent,
     SlideComponent,
+    MembersComponent,
   ],
   imports: [
     BrowserModule,

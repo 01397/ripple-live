@@ -40,9 +40,8 @@ export class SkywayService {
     })
     this.localState.subscribe(state => {
       console.log(state)
+      // ログイン時などストリームがない状態
       if (!this.localUser) {
-        console.error('no stream')
-        this.system.openSnack('問題が発生しました (s45)')
         return
       }
       const vt = this.localUser.stream.getVideoTracks()

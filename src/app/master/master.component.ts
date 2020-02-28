@@ -14,6 +14,7 @@ export class MasterComponent implements OnInit {
   public ytid: string = ''
   public tableName: string[] = []
   public tableNameFire: string[] = []
+  public membersVisibility: boolean = false
   constructor(private system: SystemService) {}
 
   ngOnInit() {
@@ -50,5 +51,11 @@ export class MasterComponent implements OnInit {
   }
   groupNameChanged() {
     return !this.tableNameFire.every((v, i) => v === this.tableName[i])
+  }
+  showMembers() {
+    this.membersVisibility = true
+  }
+  hideMembers() {
+    this.membersVisibility = false
   }
 }

@@ -1,0 +1,8 @@
+<div *ngFor="let item of memberData">
+  <div class="room">{{ item.room }}</div>
+  <div class="members">
+    <span class="member" *ngFor="let member of item.member">
+      {{ member }}
+    </span>
+  </div>
+</div>

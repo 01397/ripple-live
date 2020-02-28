@@ -15,7 +15,7 @@
   </div>
   <div class="description">
     <span>
-      ビデオIDは、https://www.youtube.com/watch?v= などに続く 4zZh_vQXwgQ などの英数11文字の記号です。<br />
+      ビデオIDは、URL等に含まれる11文字の記号です。(例: 4zZh_vQXwgQ)<br />
       YouTubeライブによる全体講義や、事前収録した動画の配信に使います。<br />
       <a href="https://www.youtube.com/livestreaming/">YouTubeライブを開始する</a>
     </span>
@@ -33,8 +33,14 @@
   <div>
     <button (click)="updateTableName()" *ngIf="groupNameChanged()" class="flexible-item">更新</button>
   </div>
+  <h3>ログインユーザー一覧</h3>
+  <button (click)="showMembers()">表示する</button>
 </div>
 <div class="right">
-  ユーザー画面
+  ユーザー画面プレビュー
   <app-group-live [master]="true" class="right-live"></app-group-live>
+</div>
+<div class="members-wrapper" (click)="hideMembers()" *ngIf="membersVisibility">
+  <app-members class="members"></app-members>
+  <button (click)="hideMembers()">閉じる</button>
 </div>

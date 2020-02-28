@@ -76,3 +76,21 @@ a {
 .highlight {
   background-color: #aaf;
 }
+
+.members-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #000d;
+  z-index: 10;
+  padding: 16px;
+}
+.members {
+    background-color: #aa8;
+    color: #222222;
+    border-radius: 8px;
+    display: block;
+    padding: 16px;
+}
