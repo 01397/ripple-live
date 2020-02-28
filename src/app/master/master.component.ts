@@ -18,7 +18,11 @@ export class MasterComponent implements OnInit {
 
   ngOnInit() {
     this.system.statusDoc.valueChanges().subscribe(status => {
-      if (!status) return
+      if (!status) {
+        console.error('unable to get master status')
+        this.system.openSnack('全体講義の情報取得に問題があります (r23)')
+        return
+      }
       this.slide = status.style.slide
       this.ytlive = status.style.ytlive
       this.ytid = status.ytid || ''

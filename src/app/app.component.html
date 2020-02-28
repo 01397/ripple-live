@@ -3,3 +3,6 @@
   <app-group-live class="main" *ngSwitchCase="'main'"></app-group-live>
   <app-master class="main" *ngSwitchCase="'master'"></app-master>
 </ng-container>
+<div class="snackbar-container">
+  <div class="snackbar" *ngFor="let snack of system.getSnacks()">{{ snack }}</div>
+</div>

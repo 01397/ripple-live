@@ -28,7 +28,11 @@ export class GroupLiveComponent implements OnInit {
       this.changeDetector.detectChanges()
     })
     this.system.statusDoc.valueChanges().subscribe(status => {
-      if (!status) return
+      if (!status) {
+        console.error('unable to get master status')
+        this.system.openSnack('全体講義の情報取得に問題があります (g33)')
+        return
+      }
       this.displayStyle = status.style
       this.videoid = status.ytid
       this.changeDetector.detectChanges()

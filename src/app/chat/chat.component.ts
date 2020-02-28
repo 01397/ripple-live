@@ -20,12 +20,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.join()
     if (!this.system.postRef) {
       console.error('system.postRef is undefined...')
+      system.openSnack('チャットが取得できません (c23)')
       return
     }
     this.posts = this.system.postRef.valueChanges()
     this.posts.subscribe(() => {
       setTimeout(() => {
-        if (!this.chatContainer) return
+        if (!this.chatContainer) {
+          console.error('unable to get chatContainer')
+          system.openSnack('チャットの更新に問題があります (c31)')
+          return
+        }
         const element = this.chatContainer.nativeElement
         element.scrollTop = element.scrollHeight
       }, 200)

@@ -40,7 +40,11 @@ export class SkywayService {
     })
     this.localState.subscribe(state => {
       console.log(state)
-      if (!this.localUser) return
+      if (!this.localUser) {
+        console.error('no stream')
+        this.system.openSnack('問題が発生しました (s45)')
+        return
+      }
       const vt = this.localUser.stream.getVideoTracks()
       if (vt[0]) vt[0].enabled = state.video
       const at = this.localUser.stream.getAudioTracks()
@@ -110,53 +114,71 @@ export class SkywayService {
   }
 
   async enterScreenShare() {
-    if (!this.localUser || !this.room) return
-    const currentStream = this.localUser.stream
-    currentStream.getTracks().forEach(track => track.stop())
-    const screenStream: MediaStream = await this.getMediaStream('screen')
-    const audioStream: MediaStream = await this.getMediaStream('audioOnly')
-    audioStream.addTrack(screenStream.getVideoTracks()[0])
-    const stream = audioStream
-    this.localUser.stream = stream
-    this.room.replaceStream(stream)
-    this.localStreamUpdate.next(stream)
-    this.localState.next({
-      audio: this.localState.value.audio,
-      video: true,
-      screen: true,
-    })
-    const func = () => this.exitScreenShare()
-    stream.addEventListener('inactive', func)
-    stream.getVideoTracks()[0].addEventListener('ended', func)
-    this.removeScreenStreamShareEventListener = () => {
-      stream.removeEventListener('inactive', func)
-      stream.getVideoTracks()[0].removeEventListener('ended', func)
+    if (!this.localUser || !this.room) {
+      this.system.openSnack('画面共有は利用できません。 (s118)')
+      return
+    }
+    try {
+      const screenStream: MediaStream = await this.getMediaStream('screen')
+      const audioStream: MediaStream = await this.getMediaStream('audioOnly')
+      audioStream.addTrack(screenStream.getVideoTracks()[0])
+      const stream = audioStream
+      const currentStream = this.localUser.stream
+      currentStream.getTracks().forEach(track => track.stop())
+      this.localUser.stream = stream
+      this.room.replaceStream(stream)
+      this.localStreamUpdate.next(stream)
+      this.localState.next({
+        audio: this.localState.value.audio,
+        video: true,
+        screen: true,
+      })
+      const func = () => this.exitScreenShare()
+      stream.addEventListener('inactive', func)
+      stream.getVideoTracks()[0].addEventListener('ended', func)
+      this.removeScreenStreamShareEventListener = () => {
+        stream.removeEventListener('inactive', func)
+        stream.getVideoTracks()[0].removeEventListener('ended', func)
+      }
+    } catch (error) {
+      console.error(error)
+      this.system.openSnack('画面共有は利用できません。')
     }
   }
   async exitScreenShare() {
     console.log('stop caputuring screen')
-    if (!this.room || !this.localUser) return
-    const screenStream = this.localUser.stream
-    screenStream.getTracks().forEach(track => track.stop())
-    if (this.removeScreenStreamShareEventListener) {
-      this.removeScreenStreamShareEventListener()
-      this.removeScreenStreamShareEventListener = null
+    if (!this.room || !this.localUser) {
+      console.error('no room or no user')
+      this.system.openSnack('映像を切り替えることができません (s152)')
+      return
     }
-    const stream = await this.getMediaStream('webCam')
-    this.localUser.stream = stream
-    this.room.replaceStream(stream)
-    this.localStreamUpdate.next(stream)
-    this.localState.next({ audio: this.localState.value.audio, video: true, screen: false })
+    try {
+      const stream = await this.getMediaStream('webCam')
+      const screenStream = this.localUser.stream
+      screenStream.getTracks().forEach(track => track.stop())
+      if (this.removeScreenStreamShareEventListener) {
+        this.removeScreenStreamShareEventListener()
+        this.removeScreenStreamShareEventListener = null
+      }
+      this.localUser.stream = stream
+      this.room.replaceStream(stream)
+      this.localStreamUpdate.next(stream)
+      this.localState.next({ audio: this.localState.value.audio, video: true, screen: false })
+    } catch (error) {
+      console.error('no webcam?')
+      this.system.openSnack('Webカメラへの切り替えに問題があります (s169)')
+    }
   }
 
   async join(roomId: string) {
     this.roomId = roomId
     console.log(roomId)
     const localStream = await this.getMediaStream('webCam')
-    if (!localStream) return
     this.setLocalStream(localStream)
 
     if (!this.peer || !this.peer.open || !this.localUser) {
+      console.error('no connection?')
+      this.system.openSnack('映像配信の接続に問題があります (s181)')
       return
     }
     this.rdb.database.ref(`rooms/${this.system.currentGroup}/${this.peer.id}`).set(this.system.currentName)
@@ -166,7 +188,11 @@ export class SkywayService {
       stream: this.localUser.stream,
     }) as SfuRoom
 
-    if (!this.room) return
+    if (!this.room) {
+      console.error('no room')
+      this.system.openSnack('テーブルへ参加できませんでした (s193)')
+      return
+    }
 
     // 自分が参加
     // @ts-ignore
@@ -230,20 +256,26 @@ export class SkywayService {
   exitRoom() {
     if (!this.room) {
       console.error('"room" is null')
-      return
+      this.system.openSnack('参加しているテーブルがありません (s259)')
+    } else {
+      this.room.close()
     }
-    this.room.close()
     this.users = []
     this.usersSubject.next(this.users)
     if (!this.peer) {
       console.error('"peer" is null')
-      return
+      this.system.openSnack('接続がありません (s267)')
+    } else {
+      this.rdb.database.ref(`rooms/${this.system.currentGroup}/${this.peer.id}`).remove()
     }
-    this.rdb.database.ref(`rooms/${this.system.currentGroup}/${this.peer.id}`).remove()
   }
 
   sendMessage(message: string) {
-    if (this.room === null || this.peer === null) return
+    if (this.room === null || this.peer === null) {
+      console.error('unable to send message')
+      this.system.openSnack('接続がありません (s276)')
+      return
+    }
     this.room.send(message)
     console.log(`${this.peer.id}: ${message}\n`)
   }

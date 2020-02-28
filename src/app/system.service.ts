@@ -40,6 +40,7 @@ export class SystemService {
   }
   public postRef?: AngularFireList<Post>
   private leaveRef?: firebase.database.OnDisconnect
+  private snackText: string[] = []
 
   constructor(db: AngularFirestore, public rdb: AngularFireDatabase) {
     this.statusDoc = db.doc<Status>('config/status')
@@ -87,7 +88,11 @@ export class SystemService {
     if (this.leaveRef) this.leaveRef.cancel()
   }
   addChatItem(body: string) {
-    if (!this.postRef) return
+    if (!this.postRef) {
+      console.error('unable to send message')
+      this.openSnack('送信できませんでした (m93)')
+      return
+    }
     const post: Post = {
       name: this.currentName,
       body: body,
@@ -96,5 +101,14 @@ export class SystemService {
       level: 1,
     }
     this.postRef.push(post)
+  }
+  openSnack(msg: string) {
+    this.snackText.push(msg)
+    setTimeout(() => {
+      this.snackText.splice(0, 1)
+    }, 4000)
+  }
+  getSnacks() {
+    return this.snackText
   }
 }
