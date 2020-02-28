@@ -33,11 +33,11 @@
   <div>
     <button (click)="updateTableName()" *ngIf="groupNameChanged()" class="flexible-item">更新</button>
   </div>
-  <h3>ログインユーザー一覧</h3>
+  <h3>参加中の生徒一覧</h3>
   <button (click)="showMembers()">表示する</button>
 </div>
 <div class="right">
-  ユーザー画面プレビュー
+  生徒画面プレビュー
   <app-group-live [master]="true" class="right-live"></app-group-live>
 </div>
 <div class="members-wrapper" (click)="hideMembers()" *ngIf="membersVisibility">
