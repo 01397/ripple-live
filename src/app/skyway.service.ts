@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, of, Subject } from 'rxjs'
 import Peer, { SfuRoom } from 'skyway-js'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFireDatabase } from '@angular/fire/database'
+import { SystemService } from './system.service'
 
 export interface User {
   id: string
@@ -20,7 +21,6 @@ export class SkywayService {
   private peer: Peer | null = null
   private room: SfuRoom | null = null
   private ROOM_MODE: 'sfu' | 'mesh' = 'sfu'
-  public metadata = { name: '', class: 0, table: 0 }
   public roomId: string = 'test'
   private localUser?: User
   private users: User[] = []
@@ -32,7 +32,7 @@ export class SkywayService {
   private removeScreenStreamShareEventListener: (() => void) | null = null
   public peerUserList: { [key in string]: string } = {}
 
-  constructor(private db: AngularFirestore) {
+  constructor(private rdb: AngularFireDatabase, private system: SystemService) {
     this.peer = new Peer({
       key: '9fa5a062-8447-46df-b6aa-86752eec9bd0',
       debug: 0,
@@ -159,6 +159,7 @@ export class SkywayService {
     if (!this.peer || !this.peer.open || !this.localUser) {
       return
     }
+    this.rdb.database.ref(`rooms/${this.system.currentGroup}/${this.peer.id}`).set(this.system.currentName)
 
     this.room = this.peer.joinRoom(this.roomId, {
       mode: this.ROOM_MODE,
@@ -210,19 +211,35 @@ export class SkywayService {
       console.log(`${src}: ${data}`)
     })
 
-    const userDoc = this.db.doc<{ [peerId in string]: string }>('config/users')
+    const userDoc = this.rdb.object<{ [key in string]: string }>('users')
     userDoc.update({
-      [this.peer.id]: this.metadata.name,
+      [this.peer.id]: this.system.currentName,
     })
     userDoc.valueChanges().subscribe(users => {
       this.peerUserList = users || {}
     })
+    this.rdb.database
+      .ref('users/' + this.peer.id)
+      .onDisconnect()
+      .remove()
+    this.rdb.database
+      .ref(`rooms/${this.system.currentGroup}/${this.peer.id}`)
+      .onDisconnect()
+      .remove()
   }
   exitRoom() {
-    if (!this.room) return
+    if (!this.room) {
+      console.error('"room" is null')
+      return
+    }
     this.room.close()
     this.users = []
     this.usersSubject.next(this.users)
+    if (!this.peer) {
+      console.error('"peer" is null')
+      return
+    }
+    this.rdb.database.ref(`rooms/${this.system.currentGroup}/${this.peer.id}`).remove()
   }
 
   sendMessage(message: string) {
@@ -244,12 +261,12 @@ export class SkywayService {
 
   setName(name: string) {
     console.log(name)
-    this.metadata.name = name
+    this.system.currentName = name
   }
   setClass(cl: number) {
-    this.metadata.class = cl
+    this.system.currentClass = cl
   }
   setTable(table: number) {
-    this.metadata.table = table
+    this.system.currentTable = table
   }
 }

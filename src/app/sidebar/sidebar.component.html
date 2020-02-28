@@ -2,10 +2,10 @@
   <img src="../../assets/images/logo.svg" />
 </div>
 <div class="info">
-  <div class="info-name">{{ skyway.metadata.name }}</div>
+  <div class="info-name">{{ system.currentName }}</div>
   <div class="info-group">
-    <div>{{ skyway.metadata.class }} 時間目</div>
-    <div>{{ system.tableNames[skyway.metadata.table] }} グループ</div>
+    <div>{{ system.currentClass }} 時間目</div>
+    <div>{{ system.tableNames[system.currentTable] }} グループ</div>
     <div class="info-group-button" (click)="reselectGroup()">グループ選択</div>
   </div>
 </div>

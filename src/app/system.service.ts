@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore'
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
 
 export interface Status {
   style: {
@@ -15,24 +16,85 @@ export interface Status {
   table: string[]
 }
 
+export interface Post {
+  name: string
+  group: string
+  timestamp: number
+  body: string
+  level: number
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class SystemService {
-  userConfig = {
-    name: '',
-    group: '',
-  }
   public screen: 'start' | 'main' | 'master' = 'start'
   public version = 'バージョン 0.6'
   public statusDoc: AngularFirestoreDocument<Status>
   public tableNames: string[] = []
+  public currentClass: number = 0
+  public currentTable: number = 0
+  public currentName: string = ''
+  public get currentGroup() {
+    return `c${this.currentClass}-t${this.currentTable}`
+  }
+  public postRef?: AngularFireList<Post>
+  private leaveRef?: firebase.database.OnDisconnect
 
-  constructor(db: AngularFirestore) {
+  constructor(db: AngularFirestore, public rdb: AngularFireDatabase) {
     this.statusDoc = db.doc<Status>('config/status')
     this.statusDoc.valueChanges().subscribe(status => {
       if (!status) return
       this.tableNames = status.table
     })
+  }
+
+  joinGroup() {
+    const post: Post = {
+      name: this.currentName,
+      body: `${this.tableNames[this.currentTable]}グループに参加しました`,
+      group: this.currentGroup,
+      timestamp: new Date().getTime(),
+      level: 0,
+    }
+    this.postRef = this.rdb.list<Post>('posts/' + this.currentGroup, ref =>
+      ref.orderByChild('timestamp').limitToLast(30)
+    )
+    this.postRef.push(post)
+    this.leaveRef = this.rdb.database
+      .ref('posts/' + this.currentGroup)
+      .push()
+      .onDisconnect()
+    this.leaveRef.set({
+      name: this.currentName,
+      body: `${this.tableNames[this.currentTable]}グループから離れました`,
+      group: this.currentGroup,
+      timestamp: new Date().getTime(),
+      level: 0,
+    })
+  }
+  leaveGroup() {
+    this.rdb.database
+      .ref('posts/' + this.currentGroup)
+      .push()
+      .set({
+        name: this.currentName,
+        body: `${this.tableNames[this.currentTable]}グループから離れました`,
+        group: this.currentGroup,
+        timestamp: new Date().getTime(),
+        level: 0,
+      })
+    if (this.leaveRef) this.leaveRef.cancel()
+  }
+  addChatItem(body: string) {
+    if (!this.postRef) return
+    const post: Post = {
+      name: this.currentName,
+      body: body,
+      group: this.currentGroup,
+      timestamp: new Date().getTime(),
+      level: 1,
+    }
+    this.postRef.push(post)
   }
 }

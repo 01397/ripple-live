@@ -1,6 +1,5 @@
 import { Component, OnInit, SecurityContext } from '@angular/core'
-import { SafeUrl, DomSanitizer } from '@angular/platform-browser'
-import { firestore } from 'firebase'
+import { DomSanitizer } from '@angular/platform-browser'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { Status } from '../system.service'
 

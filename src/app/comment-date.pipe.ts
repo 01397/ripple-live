@@ -1,12 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { firestore } from 'firebase';
+import { Pipe, PipeTransform } from '@angular/core'
 
 @Pipe({
   name: 'commentDate',
 })
 export class CommentDatePipe implements PipeTransform {
-  transform(timestamp: firestore.Timestamp): string {
-    const date = timestamp.toDate()
+  transform(timestamp: Date): string {
+    const date = new Date(timestamp)
     return (
       date
         .getHours()

@@ -23,7 +23,7 @@ export class StartComponent implements OnInit {
     console.log(name)
     console.log(this.name)
     this.version = this.system.version
-    if (this.skyway.metadata.name != '') this.progress = 1
+    if (this.system.currentName !== '') this.progress = 1
   }
 
   next() {

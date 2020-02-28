@@ -11,10 +11,11 @@ import { StartComponent } from './start/start.component'
 import { ChatComponent } from './chat/chat.component'
 import { CommentDatePipe } from './comment-date.pipe'
 import { AngularFireModule } from '@angular/fire'
-import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore'
-import { environment } from 'src/environments/environment';
-import { MasterComponent } from './master/master.component';
-import { YtliveComponent } from './ytlive/ytlive.component';
+import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFireDatabase } from '@angular/fire/database'
+import { environment } from 'src/environments/environment'
+import { MasterComponent } from './master/master.component'
+import { YtliveComponent } from './ytlive/ytlive.component'
 import { SlideComponent } from './slide/slide.component'
 
 @NgModule({
@@ -31,7 +32,7 @@ import { SlideComponent } from './slide/slide.component'
     SlideComponent,
   ],
   imports: [BrowserModule, CommonModule, FormsModule, AngularFireModule.initializeApp(environment.firebaseConfig)],
-  providers: [AngularFirestore],
+  providers: [AngularFirestore, AngularFireDatabase],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

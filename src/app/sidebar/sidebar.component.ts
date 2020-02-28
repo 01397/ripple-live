@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
     this.skyway.toggleScreenShare()
   }
   reselectGroup() {
-    this.system.screen = 'start'
     this.skyway.exitRoom()
+    this.system.screen = 'start'
   }
 }
