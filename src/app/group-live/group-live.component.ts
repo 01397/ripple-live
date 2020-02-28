@@ -16,7 +16,7 @@ export class GroupLiveComponent implements OnInit {
     slide: 'none',
     ytlive: 'none',
   }
-  public videoid: string | null = ''
+  public videoid: string | null = null
   constructor(public skyway: SkywayService, public system: SystemService, private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {

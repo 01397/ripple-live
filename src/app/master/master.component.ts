@@ -11,6 +11,9 @@ import { SystemService, Status } from '../system.service'
 export class MasterComponent implements OnInit {
   public slide: Status['style']['slide'] = 'none'
   public ytlive: Status['style']['ytlive'] = 'full'
+  public ytid: string = ''
+  public tableName: string[] = []
+  public tableNameFire: string[] = []
   constructor(private system: SystemService) {}
 
   ngOnInit() {
@@ -18,6 +21,9 @@ export class MasterComponent implements OnInit {
       if (!status) return
       this.slide = status.style.slide
       this.ytlive = status.style.ytlive
+      this.ytid = status.ytid || ''
+      this.tableName = status.table
+      this.tableNameFire = [...status.table]
     })
   }
   updateSlideStatus(value: Status['style']['slide']) {
@@ -29,6 +35,16 @@ export class MasterComponent implements OnInit {
     this.system.statusDoc.update({ style: { slide: this.slide, ytlive: value } })
   }
   updateYoutubeId(id: string) {
-    this.system.statusDoc.update({ ytid: id })
+    this.system.statusDoc.update({ ytid: this.ytid })
+  }
+  updateTableName() {
+    this.system.statusDoc.update({ table: this.tableName })
+  }
+  // https://stackoverflow.com/questions/50139508/input-loses-focus-when-editing-value-using-ngfor-and-ngmodel-angular5
+  trackByFn(index: number, item: any) {
+    return index
+  }
+  groupNameChanged() {
+    return !this.tableNameFire.every((v, i) => v === this.tableName[i])
   }
 }

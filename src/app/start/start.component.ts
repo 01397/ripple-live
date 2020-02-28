@@ -8,19 +8,18 @@ import { SystemService } from '../system.service'
   styleUrls: ['./start.component.scss'],
 })
 export class StartComponent implements OnInit {
-  public name: string = ''
+  public name: string
   private tableId: number = 0
   private class: string = ''
   public progress = 0
   public version = ''
 
-  constructor(private skyway: SkywayService, public system: SystemService) {}
+  constructor(private skyway: SkywayService, public system: SystemService) {
+    const name = localStorage.getItem('userName')
+    this.name = name !== null ? name : ''
+  }
 
   ngOnInit() {
-    const name = localStorage.getItem('userName')
-    if (name !== null) {
-      this.name = name
-    }
     console.log(name)
     console.log(this.name)
     this.version = this.system.version
@@ -36,7 +35,7 @@ export class StartComponent implements OnInit {
   }
   setName() {
     localStorage.setItem('userName', this.name)
-    if (name === 'master') {
+    if (this.name === 'master') {
       this.skyway.setName('全体')
       this.system.screen = 'master'
       return
