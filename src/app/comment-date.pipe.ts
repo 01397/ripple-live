@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core'
   name: 'commentDate',
 })
 export class CommentDatePipe implements PipeTransform {
-  transform(timestamp: Date): string {
+  transform(timestamp: number): string {
     const date = new Date(timestamp)
     return (
       date

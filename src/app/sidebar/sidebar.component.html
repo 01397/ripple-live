@@ -1,25 +1,29 @@
-<div class="logo">
-  <img src="../../assets/images/logo.svg" />
-</div>
-<div class="info">
-  <div class="info-name">{{ system.currentName }}</div>
-  <div class="info-group">
-    <div>{{ system.currentClass }} 時間目</div>
-    <div>{{ system.tableNames[system.currentTable] }} グループ</div>
-    <div class="info-group-button" (click)="reselectGroup()">グループ選択</div>
+<div class="top">
+  <div class="logo">
+    <img src="../../assets/images/logo.svg" class="logo-img" />
   </div>
+  <div class="info">
+    <div class="info-name">{{ system.currentName }}</div>
+    <div>{{ system.currentClass }} 時間目</div>
+    <div>{{ system.tableNames[system.currentTable] }} テーブル</div>
+  </div>
+</div>
+<div class="reselect-group-wrapper">
+  <button class="reselect-group-button" (click)="reselectGroup()">テーブルを移る</button>
 </div>
 <div class="chat">
   <app-chat class="chat-app"></app-chat>
 </div>
-<div class="local-controller">
-  <button [class.active]="localState.audio" (click)="toggleLocalAudio()">Audio</button>
-  <button [class.active]="localState.video" (click)="toggleLocalVideo()">Video</button>
-  <button [class.active]="localState.screen" (click)="toggleScreenShare()">screen</button>
-</div>
-<app-video
+<div class="video-container">
+  <div class="local-controller">
+    <button class="button-audio" [class.active]="localState.audio" (click)="toggleLocalAudio()"></button>
+    <button class="button-video" [class.active]="localState.video" (click)="toggleLocalVideo()"></button>
+    <button class="button-share" [class.active]="localState.screen" (click)="toggleScreenShare()"></button>
+  </div>
+  <app-video
   [stream]="skyway.getLocalUser()!.stream"
   [local]="true"
   *ngIf="skyway.getLocalUser()"
   class="video"
-></app-video>
+  ></app-video>
+</div>

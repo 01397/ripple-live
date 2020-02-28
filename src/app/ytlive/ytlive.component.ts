@@ -7,7 +7,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser'
   styleUrls: ['./ytlive.component.scss'],
 })
 export class YtliveComponent implements OnInit {
-  public videoUrl: SafeUrl | null = null
+  public videoUrl: any | null = null
   @Input() set videoid(id: string) {
     if (!id) return
     this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(

@@ -11,8 +11,8 @@ import { StartComponent } from './start/start.component'
 import { ChatComponent } from './chat/chat.component'
 import { CommentDatePipe } from './comment-date.pipe'
 import { AngularFireModule } from '@angular/fire'
-import { AngularFirestore } from '@angular/fire/firestore'
-import { AngularFireDatabase } from '@angular/fire/database'
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore'
+import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database'
 import { environment } from 'src/environments/environment'
 import { MasterComponent } from './master/master.component'
 import { YtliveComponent } from './ytlive/ytlive.component'
@@ -31,8 +31,15 @@ import { SlideComponent } from './slide/slide.component'
     YtliveComponent,
     SlideComponent,
   ],
-  imports: [BrowserModule, CommonModule, FormsModule, AngularFireModule.initializeApp(environment.firebaseConfig)],
-  providers: [AngularFirestore, AngularFireDatabase],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+    AngularFirestoreModule,
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

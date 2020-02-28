@@ -3,6 +3,43 @@
   flex-direction: column;
   background-color: rgba(255, 255, 255, 0.1);
 }
+.top {
+  display: flex;
+  padding: 8px 0;
+  align-items: center;
+}
+.logo {
+  width: 128px;
+  height: 64px;
+}
+.logo-img {
+  height: 64px;
+  width: 128px;
+}
+.info {
+  flex: 1;
+  text-align: right;
+  line-height: 1.5;
+  color: transparentize($color: #ffffff, $amount: 0.25);
+  padding-right: 8px;
+}
+.info-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #ffffff;
+}
+.reselect-group-wrapper {
+  border-bottom: 1px solid transparentize($color: #ffffff, $amount: 0.75);
+  padding-bottom: 8px;
+}
+.reselect-group-button {
+  border-radius: 24px;
+  margin: auto;
+  width: 60%;
+  text-align: center;
+  border: 1px solid #aaa;
+  padding: 4px 0;
+}
 .video {
   width: 100%;
 }
@@ -13,8 +50,19 @@
 .chat-app {
   height: 100%;
 }
+.video-container {
+  position: relative;
+}
 .local-controller {
+  position: absolute;
   display: flex;
+  z-index: 1;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.local-controller > button {
+  background-color: hsla(0, 0%, 0%, 0.75);
 }
 button {
   appearance: none;
@@ -26,22 +74,29 @@ button {
   background-color: transparent;
   flex: 1;
   border-radius: 18px;
+  display: block;
 }
 button:hover {
   background-color: rgba($color: #ffffff, $alpha: 0.1);
   color: #fff;
 }
-button.active {
-  background-color: rgba(255, 255, 255, 0.75);
+.local-controller > button.active {
+  background-color: hsla(0, 0%, 80%, 0.75);
   color: #000;
 }
-.info-name {
-  font-size: 1.2em;
+.button-audio,
+.button-share,
+.button-video {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
-.info-group-button {
-  border-radius: 4px;
-  background-color: #fff8;
-  margin: auto;
-  width: 60%;
-  text-align: center;
+.button-audio {
+  background-image: url(../../assets/images/microphone.svg);
+}
+.button-video {
+  background-image: url(../../assets/images/camera.svg);
+}
+.button-share {
+  background-image: url(../../assets/images/mirror.svg);
 }

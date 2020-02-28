@@ -39,6 +39,9 @@ input {
   border: 2px solid #fff;
   color: white;
   margin: 0 16px;
+  &:hover {
+    background-color: rgba($color: #ffffff, $alpha: 0.1);
+  }
 }
 .table-list {
   display: flex;
