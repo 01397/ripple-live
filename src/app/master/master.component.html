@@ -26,12 +26,20 @@
   </div>
   <div class="container">
     <div>スライドID</div>
-    <input type="text" [(ngModel)]="slideid" class="flexible-item" /><button (click)="updateSlideId()">変更する</button>
+    <input type="text" [(ngModel)]="slideid" class="flexible-item" /><button (click)="updateSlideId()">取得する</button>
+  </div>
+  <div class="container">
+    <span>{{ slideTitle }}</span>
   </div>
   <div class="container">
     <button (click)="backSlide()">←</button>
-    <span>{{ slideTitle }}</span>
+    {{ slideIndex.value + 1 }} / {{ pageObjectId.length }}
     <button (click)="nextSlide()">→</button>
+  </div>
+  <div class="description">
+    スライドIDは、URLに含まれる44字程度の長い文字列。<br />
+    例 3月1日授業資料: 1NWsjTBqj_Jh8nj2QqhStv3zITbbYs_CaWHB7-ikY-Gw<br />
+    スライドIDを入力 → 取得 → ページ移動<br />
   </div>
   <h3>Youtube</h3>
   <div class="select-container">

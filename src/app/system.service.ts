@@ -59,7 +59,7 @@ export class SystemService {
       level: 0,
     }
     this.postRef = this.rdb.list<Post>('posts/' + this.currentGroup, ref =>
-      ref.orderByChild('timestamp').limitToLast(30)
+      ref.orderByChild('timestamp').limitToLast(100)
     )
     this.postRef.push(post)
     this.leaveRef = this.rdb.database

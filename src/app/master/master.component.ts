@@ -18,11 +18,16 @@ export class MasterComponent implements OnInit {
   public slideUrlList: string[] = []
   public pageObjectId: string[] = []
   public slideTitle = ''
-  public slideIndex: BehaviorSubject<number> = new BehaviorSubject(0)
+  public slideIndex: BehaviorSubject<number> = new BehaviorSubject(-1)
   constructor(private system: SystemService) {}
 
   ngOnInit() {
     this.slideIndex.subscribe(i => {
+      if (i % 10 === 0) {
+        for (let k = i + 10; k < i + 20; k++) {
+          this.fetchSlideUrl(k)
+        }
+      }
       this.fetchSlideUrl(i).then(url => {
         if (!url) {
           console.error('no thumbnail')
@@ -61,14 +66,19 @@ export class MasterComponent implements OnInit {
   async updateSlideId() {
     try {
       console.log('スライド取得。' + this.slideid)
+      this.slideTitle = '取得中...'
       const req = await fetch('https://ripple-live.glitch.me/slide?presentationId=' + this.slideid)
       const json: { result: string[]; title: string } = await req.json()
       this.pageObjectId = json.result
       this.slideTitle = json.title
+      for (let i = 0; i < Math.max(20, this.pageObjectId.length); i++) {
+        this.fetchSlideUrl(i)
+      }
       this.slideIndex.next(0)
       console.log(json)
     } catch (error) {
       this.system.openSnack('スライドが取得できませんでした')
+      this.slideTitle = ''
     }
   }
   /**
