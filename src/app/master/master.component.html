@@ -14,6 +14,14 @@
   </div>
   <h3>参加中の生徒一覧</h3>
   <button (click)="showMembers()">表示する</button>
+  <h3>対象クラス</h3>
+  <div class="container">
+    <input type="checkbox" [(ngModel)]="target.c1" (change)="changeTarget()" />1限<br />
+    <input type="checkbox" [(ngModel)]="target.c2" (change)="changeTarget()" />2限<br />
+  </div>
+  <div class="description">
+    Googleスライド, Youtubeの表示対象
+  </div>
   <h3>Googleスライド</h3>
   <div class="select-container">
     <button (click)="updateSlideStatus('full')" class="selectButton" [class.selected]="slide === 'full'">

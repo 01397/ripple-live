@@ -16,6 +16,7 @@ export class GroupLiveComponent implements OnInit {
     slide: 'none',
     ytlive: 'none',
   }
+  public target =  {c1: false, c2: false}
   public videoid: string | null = null
   constructor(public skyway: SkywayService, public system: SystemService, private changeDetector: ChangeDetectorRef) {}
 
@@ -34,6 +35,7 @@ export class GroupLiveComponent implements OnInit {
         return
       }
       this.displayStyle = status.style
+      this.target = status.target
       this.videoid = status.ytid
       this.changeDetector.detectChanges()
     })

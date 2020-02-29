@@ -3,21 +3,24 @@
 <div class="main">
   <div class="main-video-container">
     <app-video
-      *ngIf="users.length !== 0 && displayStyle.ytlive !== 'full' && displayStyle.slide !== 'full'"
+      *ngIf="
+        users.length !== 0 &&
+        ((displayStyle.ytlive !== 'full' && displayStyle.slide !== 'full') || !target['c' + system.currentClass])
+      "
       [stream]="users[focusIndex].stream"
       [focused]="true"
       class="main-video"
     ></app-video>
     <app-ytlive
       class="ytlive"
-      *ngIf="displayStyle.ytlive !== 'none' && videoid !== null"
+      *ngIf="displayStyle.ytlive !== 'none' && videoid !== null && (target['c' + system.currentClass] || master)"
       [class.full]="displayStyle.ytlive === 'full'"
       [class.wipe]="displayStyle.ytlive === 'wipe'"
       [videoid]="videoid"
     ></app-ytlive>
     <app-slide
       class="slide"
-      *ngIf="displayStyle.slide !== 'none'"
+      *ngIf="displayStyle.slide !== 'none' && (target['c' + system.currentClass] || master)"
       [class.full]="displayStyle.slide === 'full'"
       [class.wipe]="displayStyle.slide === 'wipe'"
     ></app-slide>

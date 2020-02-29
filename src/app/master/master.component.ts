@@ -19,6 +19,7 @@ export class MasterComponent implements OnInit {
   public pageObjectId: string[] = []
   public slideTitle = ''
   public slideIndex: BehaviorSubject<number> = new BehaviorSubject(-1)
+  public target = { c1: false, c2: false }
   constructor(private system: SystemService) {}
 
   ngOnInit() {
@@ -47,6 +48,7 @@ export class MasterComponent implements OnInit {
       this.ytid = status.ytid || ''
       this.tableName = status.table
       this.tableNameFire = [...status.table]
+      this.target = status.target
     })
   }
   updateSlideStatus(value: Status['style']['slide']) {
@@ -67,13 +69,15 @@ export class MasterComponent implements OnInit {
     try {
       console.log('スライド取得。' + this.slideid)
       this.slideTitle = '取得中...'
-      const req = await fetch('https://ripple-live.glitch.me/slide?presentationId=' + this.slideid)
-      const json: { result: string[]; title: string } = await req.json()
+      const res = await fetch('https://ripple-live.glitch.me/slide?presentationId=' + this.slideid)
+      if (!res.ok) throw (await res.json()).error
+      const json: { result: string[]; title: string } = await res.json()
       this.pageObjectId = json.result
       this.slideTitle = json.title
       for (let i = 0; i < Math.max(20, this.pageObjectId.length); i++) {
         this.fetchSlideUrl(i)
       }
+      this.slideIndex.next(-1)
       this.slideIndex.next(0)
       console.log(json)
     } catch (error) {
@@ -89,13 +93,14 @@ export class MasterComponent implements OnInit {
     if (!this.pageObjectId[i]) return
     if (!this.slideUrlList[i]) {
       try {
-        const req = await fetch(
+        const res = await fetch(
           'https://ripple-live.glitch.me/thumbnail?pageObjectId=' +
             this.pageObjectId[i] +
             '&presentationId=' +
             this.slideid
         )
-        const json: { result: string } = await req.json()
+        if (!res.ok) throw (await res.json()).error
+        const json: { result: string } = await res.json()
         this.slideUrlList[i] = json.result
       } catch (error) {
         console.error('')
@@ -133,5 +138,8 @@ export class MasterComponent implements OnInit {
     if (0 < val) {
       this.slideIndex.next(val - 1)
     }
+  }
+  changeTarget() {
+    this.system.statusDoc.update({ target: this.target })
   }
 }
