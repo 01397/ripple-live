@@ -37,7 +37,7 @@ export class VideoComponent implements AfterViewInit, OnDestroy {
       return
     }
     const element = this.video.nativeElement
-    element.muted = this.local
+    element.muted = this.local || this.focused
     // @ts-ignore
     element.playsInline = true
     this.play(element, this.stream)
@@ -59,21 +59,27 @@ export class VideoComponent implements AfterViewInit, OnDestroy {
   }
   setVolumeWatcher() {
     if (!this.stream) return 0
-    const audioContext = new AudioContext()
-    const analyser = audioContext.createAnalyser()
-    analyser.fftSize = 128
-    const source = audioContext.createMediaStreamSource(this.stream)
-    source.connect(analyser)
-    if (!this.label) return
-    const task = () => {
-      const binary = new Uint8Array(analyser.frequencyBinCount)
-      analyser.getByteFrequencyData(binary)
-      const volume = binary.reduce((a, b) => a + b) / analyser.frequencyBinCount
-      this.volume = Math.min(volume, 100) / 100
-      this.detector.detectChanges()
+    try {
+      // @ts-ignore
+      const ctx = window.AudioContext || window.webkitAudioContext
+      const audioContext = new ctx()
+      const analyser = audioContext.createAnalyser()
+      analyser.fftSize = 128
+      const source = audioContext.createMediaStreamSource(this.stream)
+      source.connect(analyser)
+      if (!this.label) return
+      const task = () => {
+        const binary = new Uint8Array(analyser.frequencyBinCount)
+        analyser.getByteFrequencyData(binary)
+        const volume = binary.reduce((a, b) => a + b) / analyser.frequencyBinCount
+        this.volume = Math.min(volume, 100) / 100
+        this.detector.detectChanges()
+      }
+      this.timer = window.setInterval(task, 100)
+      task()
+    } catch (e) {
+      console.error(e)
     }
-    this.timer = window.setInterval(task, 100)
-    task()
   }
   ngOnDestroy() {
     window.clearInterval(this.timer)
