@@ -13,6 +13,7 @@ export class VideoComponent implements AfterViewInit {
   @Input() focused: boolean = false
   @Input() label: string = ''
   @ViewChild('video', { static: false }) private video?: ElementRef<HTMLVideoElement>
+  private playing: boolean = false
 
   constructor(private skyway: SkywayService, private system: SystemService) {}
 
@@ -28,18 +29,20 @@ export class VideoComponent implements AfterViewInit {
     // @ts-ignore
     element.playsInline = true
     element.srcObject = this.stream
-    element.play()
+    element.play().then(() => (this.playing = true))
     if (this.local === true) {
       this.skyway.localStreamUpdate.subscribe(stream => {
-        element.pause()
+        if (this.playing) element.pause()
         element.srcObject = stream
-        element.play()
+        this.playing = false
+        element.play().then(() => (this.playing = true))
       })
     } else if (this.focused === true) {
       this.skyway.focusUpdate.subscribe(stream => {
-        element.pause()
+        if (this.playing) element.pause()
         element.srcObject = stream
-        element.play()
+        this.playing = false
+        element.play().then(() => (this.playing = true))
       })
     }
   }

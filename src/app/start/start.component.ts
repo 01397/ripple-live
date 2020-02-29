@@ -60,6 +60,8 @@ export class StartComponent implements OnInit {
       this.skyway.setName('全体')
       this.system.screen = 'master'
       this.system.openSnack('管理者ログインに成功しました')
+    } else {
+      this.system.openSnack('アカウントが違います')
     }
   }
 }
