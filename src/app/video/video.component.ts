@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  ChangeDetectorRef,
+  OnDestroy,
+} from '@angular/core'
 import { SkywayService } from '../skyway.service'
 import { SystemService } from '../system.service'
 
@@ -7,15 +16,17 @@ import { SystemService } from '../system.service'
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss'],
 })
-export class VideoComponent implements AfterViewInit {
+export class VideoComponent implements AfterViewInit, OnDestroy {
   @Input() stream?: MediaStream
   @Input() local: boolean = false
   @Input() focused: boolean = false
   @Input() label: string = ''
   @ViewChild('video', { static: false }) private video?: ElementRef<HTMLVideoElement>
   private playing: boolean = false
+  public volume: number = 0
+  private timer?: number
 
-  constructor(private skyway: SkywayService, private system: SystemService) {}
+  constructor(private skyway: SkywayService, private system: SystemService, private detector: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     console.info(this.video)
@@ -45,5 +56,27 @@ export class VideoComponent implements AfterViewInit {
         element.play().then(() => (this.playing = true))
       })
     }
+    this.setVolumeWatcher()
+  }
+  setVolumeWatcher() {
+    if (!this.stream) return 0
+    const audioContext = new AudioContext()
+    const analyser = audioContext.createAnalyser()
+    analyser.fftSize = 128
+    const source = audioContext.createMediaStreamSource(this.stream)
+    source.connect(analyser)
+    if (!this.label) return
+    const task = () => {
+      const binary = new Uint8Array(analyser.frequencyBinCount)
+      analyser.getByteFrequencyData(binary)
+      const volume = binary.reduce((a, b) => a + b) / analyser.frequencyBinCount
+      this.volume = Math.min(volume, 100) / 100
+      this.detector.detectChanges()
+    }
+    this.timer = window.setInterval(task, 100)
+    task()
+  }
+  ngOnDestroy() {
+    window.clearInterval(this.timer)
   }
 }

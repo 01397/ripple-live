@@ -1,2 +1,5 @@
 <video class="video" #video width="640" height="360"></video>
-<div class="label">{{ label }}</div>
+<ng-container *ngIf="label">
+  <div class="label">{{ label }}</div>
+  <div class="volume" [style.transform]="'scaleY(' + volume + ')'"></div>
+</ng-container>

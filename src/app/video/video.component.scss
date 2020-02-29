@@ -1,5 +1,7 @@
 :host {
   position: relative;
+  height: 100%;
+  display: block;
 }
 video {
   width: 100%;
@@ -8,8 +10,32 @@ video {
 }
 .label {
   position: absolute;
+  bottom: 0;
   left: 0;
   right: 0;
-  font-weight: bold;
-  background-color: #ff000088;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.75));
+  color: white;
+  text-shadow: 0 0 4px #000;
+  padding: 16px 4px 4px 16px;
+}
+.volume {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  height: 64px;
+  transform-origin: bottom;
+  background-color: transparentize($color: #0066aa, $amount: 0.25);
+}
+.v1 {
+  bottom: 0;
+}
+.v2 {
+  bottom: 5px;
+}
+.v3 {
+  bottom: 10px;
+}
+.v4 {
+  bottom: 15px;
 }

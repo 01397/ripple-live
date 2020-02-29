@@ -1,4 +1,38 @@
 <div class="left">
+  <h3>グループ名</h3>
+  <div class="group-name-container">
+    <input
+      type="text"
+      [(ngModel)]="tableName[i]"
+      *ngFor="let name of tableName; let i = index; trackBy: trackByFn"
+      [class.highlight]="tableNameFire[i] !== input.value"
+      #input
+    />
+  </div>
+  <div>
+    <button (click)="updateTableName()" *ngIf="groupNameChanged()" class="flexible-item">更新</button>
+  </div>
+  <h3>参加中の生徒一覧</h3>
+  <button (click)="showMembers()">表示する</button>
+  <h3>Googleスライド</h3>
+  <div class="select-container">
+    <button (click)="updateSlideStatus('full')" class="selectButton" [class.selected]="slide === 'full'">
+      全画面表示
+    </button>
+    <button (click)="updateSlideStatus('wipe')" class="selectButton" [class.selected]="slide === 'wipe'">
+      ワイプ表示
+    </button>
+    <button (click)="updateSlideStatus('none')" class="selectButton" [class.selected]="slide === 'none'">OFF</button>
+  </div>
+  <div class="container">
+    <div>スライドID</div>
+    <input type="text" [(ngModel)]="slideid" class="flexible-item" /><button (click)="updateSlideId()">変更する</button>
+  </div>
+  <div class="container">
+    <button (click)="backSlide()">←</button>
+    <span>{{ slideTitle }}</span>
+    <button (click)="nextSlide()">→</button>
+  </div>
   <h3>Youtube</h3>
   <div class="select-container">
     <button (click)="updateYtliveStatus('full')" class="selectButton" [class.selected]="ytlive === 'full'">
@@ -20,21 +54,6 @@
       <a href="https://www.youtube.com/livestreaming/">YouTubeライブを開始する</a>
     </span>
   </div>
-  <h3>グループ名</h3>
-  <div class="group-name-container">
-    <input
-      type="text"
-      [(ngModel)]="tableName[i]"
-      *ngFor="let name of tableName; let i = index; trackBy: trackByFn"
-      [class.highlight]="tableNameFire[i] !== input.value"
-      #input
-    />
-  </div>
-  <div>
-    <button (click)="updateTableName()" *ngIf="groupNameChanged()" class="flexible-item">更新</button>
-  </div>
-  <h3>参加中の生徒一覧</h3>
-  <button (click)="showMembers()">表示する</button>
 </div>
 <div class="right">
   生徒画面プレビュー

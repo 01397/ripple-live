@@ -79,16 +79,6 @@
   box-sizing: border-box;
   min-width: 150px;
 }
-.bottom-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.75));
-  color: white;
-  text-shadow: 0 0 4px #000;
-  padding: 16px 4px 4px;
-}
 .active {
   border: 2px solid #06a;
 }

@@ -29,8 +29,7 @@
       (click)="setFocus(i)"
       [class.active]="i === focusIndex"
     >
-      <app-video [stream]="user.stream" class="bottom-video"></app-video>
-      <div class="bottom-label">{{ skyway.peerUserList[user.id] }}</div>
+      <app-video [stream]="user.stream" [label]="skyway.peerUserList[user.id]" class="bottom-video"></app-video>
     </div>
   </div>
 </div>
