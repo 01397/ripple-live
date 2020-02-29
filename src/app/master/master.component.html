@@ -53,7 +53,7 @@
   </div>
   <div class="container">
     <div>ビデオID</div>
-    <input type="text" [value]="ytid" class="flexible-item" /><button (click)="updateYoutubeId()">変更する</button>
+    <input type="text" [(ngModel)]="ytid" class="flexible-item" /><button (click)="updateYoutubeId()">変更する</button>
   </div>
   <div class="description">
     <span>
