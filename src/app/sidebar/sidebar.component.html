@@ -14,16 +14,11 @@
 <div class="chat">
   <app-chat class="chat-app"></app-chat>
 </div>
-<div class="video-container">
+<div class="video-container" *ngIf="skyway.getLocalUser()">
   <div class="local-controller">
     <button class="button-audio" [class.active]="localState.audio" (click)="toggleLocalAudio()"></button>
     <button class="button-video" [class.active]="localState.video" (click)="toggleLocalVideo()"></button>
     <button class="button-share" [class.active]="localState.screen" (click)="toggleScreenShare()"></button>
   </div>
-  <app-video
-  [stream]="skyway.getLocalUser()!.stream"
-  [local]="true"
-  *ngIf="skyway.getLocalUser()"
-  class="video"
-  ></app-video>
+  <app-video [stream]="skyway.getLocalUser()!.stream" [local]="true" class="video"></app-video>
 </div>
