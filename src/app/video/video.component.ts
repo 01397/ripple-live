@@ -22,9 +22,10 @@ export class VideoComponent implements AfterViewInit, OnDestroy {
   @Input() focused: boolean = false
   @Input() label: string = ''
   @ViewChild('video', { static: false }) private video?: ElementRef<HTMLVideoElement>
-  private playing: boolean = false
+  private playProcess: boolean = false
   public volume: number = 0
   private timer?: number
+  private timer2?: number
 
   constructor(private skyway: SkywayService, private system: SystemService, private detector: ChangeDetectorRef) {}
 
@@ -39,24 +40,22 @@ export class VideoComponent implements AfterViewInit, OnDestroy {
     element.muted = this.local
     // @ts-ignore
     element.playsInline = true
-    element.srcObject = this.stream
-    element.play().then(() => (this.playing = true))
+    this.play(element, this.stream)
     if (this.local === true) {
       this.skyway.localStreamUpdate.subscribe(stream => {
-        if (this.playing) element.pause()
-        element.srcObject = stream
-        this.playing = false
-        element.play().then(() => (this.playing = true))
+        this.play(element, stream)
       })
     } else if (this.focused === true) {
       this.skyway.focusUpdate.subscribe(stream => {
-        if (this.playing) element.pause()
-        element.srcObject = stream
-        this.playing = false
-        element.play().then(() => (this.playing = true))
+        this.play(element, stream)
       })
     }
     this.setVolumeWatcher()
+    this.timer2 = window.setInterval(() => {
+      if (!element.paused) return
+      console.log('try play()')
+      element.play()
+    }, 5000)
   }
   setVolumeWatcher() {
     if (!this.stream) return 0
@@ -78,5 +77,26 @@ export class VideoComponent implements AfterViewInit, OnDestroy {
   }
   ngOnDestroy() {
     window.clearInterval(this.timer)
+    window.clearInterval(this.timer2)
+  }
+  play(element: HTMLVideoElement, stream: MediaStream) {
+    if (element.srcObject) {
+      if ('id' in element.srcObject && stream.id && element.srcObject.id == stream.id) {
+        return
+      }
+    }
+    element.srcObject = stream
+    console.log('playVideo')
+    this.playProcess = true
+    element
+      .play()
+      .then(() => {
+        this.playProcess = false
+      })
+      .catch(e => {
+        console.error(e)
+        console.error('再生中断エラー...')
+        this.playProcess = false
+      })
   }
 }
