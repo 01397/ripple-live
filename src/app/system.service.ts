@@ -29,7 +29,7 @@ export interface Post {
 })
 export class SystemService {
   public screen: 'start' | 'main' | 'master' = 'start'
-  public version = 'バージョン 0.9'
+  public version = 'バージョン 0.10'
   public statusDoc: AngularFirestoreDocument<Status>
   public tableNames: string[] = []
   public currentClass: number = 0
