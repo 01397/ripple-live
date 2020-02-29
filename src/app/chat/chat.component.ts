@@ -1,5 +1,5 @@
 import { Component, OnInit, PipeTransform, Pipe, ElementRef, ViewChild, OnDestroy } from '@angular/core'
-import { Observable, Subject } from 'rxjs'
+import { Observable, Subject, of } from 'rxjs'
 import { SystemService, Post } from '../system.service'
 
 @Component({
@@ -11,6 +11,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   public posts?: Observable<Post[]>
   public formMessage: string = ''
   @ViewChild('postContainer', { static: false }) private chatContainer?: ElementRef<HTMLDivElement>
+  private compositionJustEnd: boolean = false
 
   constructor(private system: SystemService) {
     this.join()
@@ -34,6 +35,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {}
   addItem() {
+    if (this.formMessage === '') return
     this.system.addChatItem(this.formMessage)
     this.formMessage = ''
   }
@@ -42,5 +44,15 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.system.leaveGroup()
+  }
+  onEnter() {
+    if (!this.compositionJustEnd) {
+      this.addItem()
+    } else {
+      this.compositionJustEnd = false
+    }
+  }
+  compositionEnd() {
+    this.compositionJustEnd = true
   }
 }
