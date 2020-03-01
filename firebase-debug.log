@@ -1,0 +1,29 @@
+[debug] [2020-03-01T01:15:25.731Z] ----------------------------------------------------------------------
+[debug] [2020-03-01T01:15:25.733Z] Command:       /Users/naoki/.nodebrew/node/v12.14.1/bin/node /Users/naoki/.nodebrew/current/bin/firebase deploy
+[debug] [2020-03-01T01:15:25.733Z] CLI Version:   7.14.0
+[debug] [2020-03-01T01:15:25.733Z] Platform:      darwin
+[debug] [2020-03-01T01:15:25.733Z] Node Version:  v12.14.1
+[debug] [2020-03-01T01:15:25.733Z] Time:          Sun Mar 01 2020 10:15:25 GMT+0900 (Japan Standard Time)
+[debug] [2020-03-01T01:15:25.734Z] ----------------------------------------------------------------------
+[debug] [2020-03-01T01:15:25.734Z] 
+[debug] [2020-03-01T01:15:25.743Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-01T01:15:25.743Z] > authorizing via signed-in user
+[debug] [2020-03-01T01:15:25.743Z] [iam] checking project ripple-live for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-03-01T01:15:25.745Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-03-01T01:15:25.745Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-03-01T01:15:25.954Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-01T01:15:25.966Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/ripple-live:testIamPermissions  
+
+[debug] [2020-03-01T01:15:26.845Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-01T01:15:26.847Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/ripple-live  
+ 
+[debug] [2020-03-01T01:15:27.591Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'ripple-live'...
+[info] 
+[info] i  deploying firestore, hosting
+[info] i  firestore: reading indexes from firestore.indexes.json...
+[info] i  cloud.firestore: checking firestore.rules for compilation errors...
+[debug] [2020-03-01T01:15:27.597Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/ripple-live:test  
+
