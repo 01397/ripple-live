@@ -172,8 +172,26 @@ export class SkywayService {
   async join(roomId: string) {
     this.roomId = roomId
     console.log(roomId)
-    const localStream = await this.getMediaStream('webCam')
-    this.setLocalStream(localStream)
+    try {
+      const localStream = await this.getMediaStream('webCam')
+      this.setLocalStream(localStream)
+    } catch (e) {
+      // カメラなしデバイスなど。
+      this.system.openSnack('カメラやマイクは利用できません。')
+      console.error(e)
+      /*const cvs = document.createElement('canvas')
+      cvs.width = 16
+      cvs.height = 9
+      const ctx = cvs.getContext('2d')
+      if (!ctx) return
+      ctx.fillStyle = "#ffaa00"
+      ctx.fillRect(0, 0, 16, 9)*/
+      const stream = new MediaStream()
+      this.localUser = {
+        id: 'local',
+        stream,
+      }
+    }
 
     if (!this.peer || !this.peer.open || !this.localUser) {
       console.error('no connection?')
