@@ -87,7 +87,7 @@ export class VideoComponent implements AfterViewInit, OnDestroy {
   }
   play(element: HTMLVideoElement, stream: MediaStream) {
     if (element.srcObject) {
-      if ('id' in element.srcObject && stream.id && element.srcObject.id == stream.id) {
+      if ('id' in element.srcObject && stream.id && element.srcObject.id == stream.id && !this.playProcess) {
         return
       }
     }

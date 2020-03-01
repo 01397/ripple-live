@@ -16,7 +16,7 @@ export class GroupLiveComponent implements OnInit {
     slide: 'none',
     ytlive: 'none',
   }
-  public target =  {c1: false, c2: false}
+  public target: { [key in string]: boolean } = { c1: false, c2: false }
   public videoid: string | null = null
   constructor(public skyway: SkywayService, public system: SystemService, private changeDetector: ChangeDetectorRef) {}
 
