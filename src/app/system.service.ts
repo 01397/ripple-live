@@ -4,7 +4,7 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
 
 export interface Status {
   style: {
-    ytlive: 'full' | 'wipe' | 'none'
+    ytlive: 'full' | 'wipe' | 'none' | 'sound'
     slide: 'full' | 'wipe' | 'none'
   }
   target: {
@@ -14,6 +14,7 @@ export interface Status {
   ytid: string | null
   slideURL: string | null
   table: string[]
+  fixedText: string
 }
 
 export interface Post {

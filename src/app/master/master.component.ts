@@ -18,6 +18,7 @@ export class MasterComponent implements OnInit {
   public slideUrlList: string[] = []
   public pageObjectId: string[] = []
   public slideTitle = ''
+  public fixedText = ''
   public slideIndex: BehaviorSubject<number> = new BehaviorSubject(-1)
   public target = { c1: false, c2: false }
   constructor(private system: SystemService) {}
@@ -49,6 +50,7 @@ export class MasterComponent implements OnInit {
       this.tableName = status.table
       this.tableNameFire = [...status.table]
       this.target = status.target
+      this.fixedText = status.fixedText
     })
   }
   updateSlideStatus(value: Status['style']['slide']) {
@@ -62,13 +64,16 @@ export class MasterComponent implements OnInit {
   updateYoutubeId() {
     this.system.statusDoc.update({ ytid: this.ytid })
   }
+  updateFixedText() {
+    this.system.statusDoc.update({ fixedText: this.fixedText })
+  }
   /**
    * presentationIdからpageObjectIdのリストを取得
    */
   async updateSlideId() {
     try {
       console.log('スライド取得。' + this.slideid)
-      this.slideTitle = '取得中...'
+      this.slideTitle = '取得中...(最大約15秒)'
       const res = await fetch('https://ripple-live.glitch.me/slide?presentationId=' + this.slideid)
       if (!res.ok) throw (await res.json()).error
       const json: { result: string[]; title: string } = await res.json()
@@ -127,6 +132,9 @@ export class MasterComponent implements OnInit {
   hideMembers() {
     this.membersVisibility = false
   }
+  headSlide() {
+    this.slideIndex.next(0)
+  }
   nextSlide() {
     const val = this.slideIndex.value
     if (val < this.pageObjectId.length - 2) {
@@ -138,6 +146,9 @@ export class MasterComponent implements OnInit {
     if (0 < val) {
       this.slideIndex.next(val - 1)
     }
+  }
+  tailSlide() {
+    this.slideIndex.next(this.pageObjectId.length - 1)
   }
   changeTarget() {
     this.system.statusDoc.update({ target: this.target })

@@ -53,6 +53,28 @@
   min-height: 0;
   position: relative;
 }
+.fixedText {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;
+  margin: auto;
+  width: max-content;
+  padding: 0 16px;
+  font-weight: bold;
+  background-image: linear-gradient(to right, transparent, #00000088, transparent);
+  filter: drop-shadow(-1px -1px 1px #000000c4) drop-shadow(-1px 1px 1px #000000c4) drop-shadow(1px -1px 1px #000000c4)
+    drop-shadow(1px 1px 1px #000000c4);
+  font-size: 24px;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffffff, #888888 50%, #dddddd 50%, #888888);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  z-index: 5;
+}
 .main-video {
   width: 100%;
   height: 100%;
@@ -99,5 +121,11 @@
 .wipe {
   width: 30%;
   height: 20%;
+  z-index: 6;
+}
+.sound {
+  width: 0;
+  height: 0;
+  pointer-events: none;
   z-index: 6;
 }

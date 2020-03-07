@@ -1,4 +1,4 @@
-rules_version = '2';
+rules_version = '3';
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -11,7 +11,8 @@ service cloud.firestore {
     // Make sure to write security rules for your app before that time, or else
     // your app will lose access to your Firestore database
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2020, 3, 27);
+      allow read;
+      allow write: if request.auth.token.email == "uec.programming@gmail.com";
     }
   }
 }

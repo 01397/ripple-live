@@ -34,7 +34,7 @@ export class SkywayService {
 
   constructor(private rdb: AngularFireDatabase, private system: SystemService) {
     this.peer = new Peer({
-      key: '9fa5a062-8447-46df-b6aa-86752eec9bd0',
+      key: '87a48baf-bb9f-4693-915b-521028977b40',
       debug: 0,
       turn: true,
     })

@@ -20,15 +20,21 @@
     <input type="checkbox" [(ngModel)]="target.c2" (change)="changeTarget()" />2限<br />
   </div>
   <div class="description">
-    Googleスライド, Youtubeの表示対象
+    Googleスライド, Youtube, 固定テキストの表示対象 
+  </div>
+  <h3>全員固定テキスト</h3>
+  <div class="container">
+    <input type="text" [(ngModel)]="fixedText" class="flexible-item" /><button (click)="updateFixedText()">
+      更新する
+    </button>
   </div>
   <h3>Googleスライド</h3>
   <div class="select-container">
     <button (click)="updateSlideStatus('full')" class="selectButton" [class.selected]="slide === 'full'">
-      全画面表示
+      全画面
     </button>
     <button (click)="updateSlideStatus('wipe')" class="selectButton" [class.selected]="slide === 'wipe'">
-      ワイプ表示
+      ワイプ
     </button>
     <button (click)="updateSlideStatus('none')" class="selectButton" [class.selected]="slide === 'none'">OFF</button>
   </div>
@@ -40,22 +46,27 @@
     <span>{{ slideTitle }}</span>
   </div>
   <div class="container">
+    <button (click)="headSlide()">←先頭へ</button>
     <button (click)="backSlide()">←</button>
     {{ slideIndex.value + 1 }} / {{ pageObjectId.length }}
     <button (click)="nextSlide()">→</button>
+    <button (click)="tailSlide()">最後へ→</button>
   </div>
   <div class="description">
-    スライドIDは、URLに含まれる44字程度の長い文字列。<br />
-    例 3月1日授業資料: 1NWsjTBqj_Jh8nj2QqhStv3zITbbYs_CaWHB7-ikY-Gw<br />
+    スライドIDは、URLに含まれる44字程度の文字列。<br />
+    例 3月8日授業資料: 1nNjykLe6ZszFXl_TBo519ipk3VJOhFSxqiqV_pWNyBY<br />
     スライドIDを入力 → 取得 → ページ移動<br />
   </div>
   <h3>Youtube</h3>
   <div class="select-container">
     <button (click)="updateYtliveStatus('full')" class="selectButton" [class.selected]="ytlive === 'full'">
-      全画面表示
+      全画面
     </button>
     <button (click)="updateYtliveStatus('wipe')" class="selectButton" [class.selected]="ytlive === 'wipe'">
-      ワイプ表示
+      ワイプ
+    </button>
+    <button (click)="updateYtliveStatus('sound')" class="selectButton" [class.selected]="ytlive === 'sound'">
+      音のみ
     </button>
     <button (click)="updateYtliveStatus('none')" class="selectButton" [class.selected]="ytlive === 'none'">OFF</button>
   </div>
