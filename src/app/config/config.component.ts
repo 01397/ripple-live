@@ -10,13 +10,12 @@ import { SkywayService } from '../skyway.service'
 export class ConfigComponent implements OnInit {
   public audioDevices: MediaDeviceInfo[] = []
   public videoDevices: MediaDeviceInfo[] = []
-  constructor(private systemService: SystemService, private skywayService: SkywayService) {}
+  constructor(private systemService: SystemService, public skywayService: SkywayService) {}
 
   ngOnInit() {
     navigator.mediaDevices
       .enumerateDevices()
       .then(devices => {
-        debugger
         this.audioDevices = devices.filter(v => v.kind === 'audioinput')
         this.videoDevices = devices.filter(v => v.kind === 'videoinput')
       })
@@ -24,14 +23,8 @@ export class ConfigComponent implements OnInit {
         console.error('enumerateDevide ERROR:', err)
       })
   }
-
-  setVideoDevice(deviceId: string) {
-    this.skywayService.videoDevice = deviceId
-  }
-  setAudioDevice(deviceId: string) {
-    this.skywayService.audioDevice = deviceId
-  }
   closeConfig() {
     this.systemService.configDialog = false
+    this.skywayService.updateMediaSource()
   }
 }

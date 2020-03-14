@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         element.scrollTop = element.scrollHeight
       }, 200)
       const latest = posts[posts.length - 1]
-      if (latest.level !== 0) {
+      if (latest.level !== 0 && latest.name !== this.system.currentName) {
         const notification = new Notification(latest.name, {
           renotify: true,
           tag: 'new post',

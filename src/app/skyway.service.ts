@@ -52,6 +52,13 @@ export class SkywayService {
       if (at[0]) at[0].enabled = state.audio
     })
   }
+  async updateMediaSource() {
+    if (this.localState.value.screen) {
+      this.enterScreenShare(true)
+    } else {
+      this.exitScreenShare()
+    }
+  }
 
   setLocalStream(stream: MediaStream) {
     this.localUser = {
@@ -128,15 +135,21 @@ export class SkywayService {
     }
   }
 
-  async enterScreenShare() {
+  async enterScreenShare(continuing: boolean = false) {
     if (!this.localUser || !this.room) {
       this.system.openSnack('画面共有は利用できません。 (s118)')
       return
     }
     try {
-      const screenStream: MediaStream = await this.getMediaStream('screen')
+      let screenTrack
+      if (continuing) {
+        screenTrack = this.localUser.stream.getVideoTracks()[0]
+      } else {
+        const screenStream: MediaStream = await this.getMediaStream('screen')
+        screenTrack = screenStream.getVideoTracks()[0]
+      }
       const audioStream: MediaStream = await this.getMediaStream('audioOnly')
-      audioStream.addTrack(screenStream.getVideoTracks()[0])
+      audioStream.addTrack(screenTrack)
       const stream = audioStream
       const currentStream = this.localUser.stream
       currentStream.getTracks().forEach(track => track.stop())
