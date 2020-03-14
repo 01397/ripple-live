@@ -1,8 +1,8 @@
 <app-sidebar *ngIf="!master" class="sidebar" [class.opened]="sidebarOpened"></app-sidebar>
 <div *ngIf="!master" class="sidebar-menu" (click)="toggleSidebar()" [class.opened]="sidebarOpened">SIDE</div>
 <div class="main">
-  <div class="main-video-container">
-    <div class="fixedText">{{ fixedText }}</div>
+  <div class="main-video-container" [class.disaster]="fixedText !== ''">
+    <div class="fixedText" *ngIf="fixedText !== ''">{{ fixedText }}</div>
     <app-video
       *ngIf="
         users.length !== 0 &&
