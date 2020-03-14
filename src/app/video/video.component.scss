@@ -39,3 +39,22 @@ video {
 .v4 {
   bottom: 15px;
 }
+:host:hover .mute-button {
+  opacity: 1;
+}
+input:checked+.mute-button {
+  opacity: 1;
+}
+.mute-button {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 2px 4px;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+.mute-input {
+  display: none;
+}

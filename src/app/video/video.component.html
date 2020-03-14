@@ -3,3 +3,7 @@
   <div class="label">{{ label }}</div>
   <div class="volume" [style.transform]="'scaleY(' + volume + ')'"></div>
 </ng-container>
+<label *ngIf="!local && !this.focused" class="mute-label">
+  <input type="checkbox" [(ngModel)]="video.muted" class="mute-input" />
+  <div class="mute-button">ミュート<span *ngIf="video.muted">中</span></div>
+</label>
