@@ -43,6 +43,7 @@ export class SystemService {
   public postRef?: AngularFireList<Post>
   private leaveRef?: firebase.database.OnDisconnect
   private snackText: string[] = []
+  public configDialog: boolean = false
 
   constructor(db: AngularFirestore, public rdb: AngularFireDatabase) {
     this.statusDoc = db.doc<Status>('config/status')
@@ -112,5 +113,11 @@ export class SystemService {
   }
   getSnacks() {
     return this.snackText
+  }
+  showConfigDialog() {
+    this.configDialog = true
+  }
+  hideConfigDialog() {
+    this.configDialog = false
   }
 }

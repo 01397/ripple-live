@@ -31,4 +31,7 @@ export class SidebarComponent implements OnInit {
     this.skyway.exitRoom()
     this.system.screen = 'start'
   }
+  showConfigDialog() {
+    this.system.showConfigDialog()
+  }
 }

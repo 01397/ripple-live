@@ -1,0 +1,11 @@
+<div class="container">
+  <h3>映像</h3>
+  <select (change)="setVideoDevice($event.value)">
+    <option *ngFor="let device of videoDevices" [value]="device.deviceId">{{ device.label }}</option>
+  </select>
+  <h3>音声</h3>
+  <select (change)="setAudioDevice($event.value)">
+    <option *ngFor="let device of audioDevices" [value]="device.deviceId">{{ device.label }}</option>
+  </select>
+  <button (click)="closeConfig()">閉じる</button>
+</div>

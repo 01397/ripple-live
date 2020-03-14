@@ -31,6 +31,8 @@ export class SkywayService {
   public focusUpdate = new Subject<MediaStream>()
   private removeScreenStreamShareEventListener: (() => void) | null = null
   public peerUserList: { [key in string]: string } = {}
+  public audioDevice: string | null = null
+  public videoDevice: string | null = null
 
   constructor(private rdb: AngularFireDatabase, private system: SystemService) {
     this.peer = new Peer({
@@ -82,14 +84,28 @@ export class SkywayService {
             })
         )
       case 'audioOnly':
+        if (this.audioDevice !== null) {
+          return navigator.mediaDevices.getUserMedia({
+            audio: {
+              deviceId: this.audioDevice,
+            },
+            video: false,
+          })
+        }
         return navigator.mediaDevices.getUserMedia({
           audio: true,
           video: false,
         })
       case 'webCam':
         return navigator.mediaDevices.getUserMedia({
-          audio: true,
+          audio:
+            this.audioDevice !== null
+              ? {
+                  deviceId: this.audioDevice,
+                }
+              : true,
           video: {
+            deviceId: this.videoDevice !== null ? this.videoDevice : undefined,
             width: {
               min: 320,
               max: 640,

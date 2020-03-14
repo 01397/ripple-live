@@ -18,7 +18,8 @@ import { MasterComponent } from './master/master.component'
 import { YtliveComponent } from './ytlive/ytlive.component'
 import { SlideComponent } from './slide/slide.component'
 import { MembersComponent } from './members/members.component'
-import { AngularFireAuthModule } from '@angular/fire/auth'
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { ConfigComponent } from './config/config.component'
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth'
     YtliveComponent,
     SlideComponent,
     MembersComponent,
+    ConfigComponent,
   ],
   imports: [
     BrowserModule,
