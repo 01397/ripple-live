@@ -71,7 +71,21 @@ export class SkywayService {
     return this.localUser
   }
 
+  checkPermission() {
+    navigator.permissions.query({ name: 'camera' }).then(result => {
+      if (result.state !== 'granted') {
+        this.system.openSnack('ブラウザの設定により、カメラの使用が拒否されています')
+      }
+    })
+    navigator.permissions.query({ name: 'microphone' }).then(result => {
+      if (result.state !== 'granted') {
+        this.system.openSnack('ブラウザの設定により、マイクの使用が拒否されています')
+      }
+    })
+  }
+
   getMediaStream(type: 'audioOnly' | 'webCam' | 'screen'): Promise<MediaStream> {
+    this.checkPermission()
     switch (type) {
       case 'screen':
         return (
@@ -104,25 +118,45 @@ export class SkywayService {
           video: false,
         })
       case 'webCam':
-        return navigator.mediaDevices.getUserMedia({
-          audio:
-            this.audioDevice !== null
-              ? {
-                  deviceId: this.audioDevice,
-                }
-              : true,
-          video: {
-            deviceId: this.videoDevice !== null ? this.videoDevice : undefined,
-            width: {
-              min: 320,
-              max: 640,
+        return navigator.permissions.query({ name: 'camera' }).then(result => {
+          if (result.state !== 'granted') {
+            return new Promise(resolve => {
+              const cvs = document.createElement('canvas')
+              cvs.width = 16
+              cvs.height = 9
+              const ctx = cvs.getContext('2d')
+              if (!ctx) return
+              ctx.fillStyle = '#0000ff'
+              ctx.fillRect(0, 0, 16, 9)
+              // @ts-ignore
+              const videoStream: MediaStream = cvs.captureStream(5)
+              const videoTrack = videoStream.getVideoTracks()[0]
+              this.getMediaStream('audioOnly').then((audioStream: MediaStream) => {
+                audioStream.addTrack(videoTrack)
+                resolve(audioStream)
+              })
+            })
+          }
+          return navigator.mediaDevices.getUserMedia({
+            audio:
+              this.audioDevice !== null
+                ? {
+                    deviceId: this.audioDevice,
+                  }
+                : true,
+            video: {
+              deviceId: this.videoDevice !== null ? this.videoDevice : undefined,
+              width: {
+                min: 320,
+                max: 640,
+              },
+              height: {
+                min: 240,
+                max: 360,
+              },
+              frameRate: 10,
             },
-            height: {
-              min: 240,
-              max: 360,
-            },
-            frameRate: 10,
-          },
+          })
         })
     }
   }
@@ -208,17 +242,10 @@ export class SkywayService {
       // カメラなしデバイスなど。
       this.system.openSnack('カメラやマイクは利用できません。')
       console.error(e)
-      /*const cvs = document.createElement('canvas')
-      cvs.width = 16
-      cvs.height = 9
-      const ctx = cvs.getContext('2d')
-      if (!ctx) return
-      ctx.fillStyle = "#ffaa00"
-      ctx.fillRect(0, 0, 16, 9)*/
-      const stream = new MediaStream()
+      // const stream = new MediaStream()
       this.localUser = {
         id: 'local',
-        stream,
+        stream: new MediaStream(),
       }
     }
 
