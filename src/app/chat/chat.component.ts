@@ -21,7 +21,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       return
     }
     this.posts = this.system.postRef.valueChanges()
-    this.posts.subscribe(() => {
+    this.posts.subscribe(posts => {
       setTimeout(() => {
         if (!this.chatContainer) {
           console.error('unable to get chatContainer')
@@ -31,6 +31,15 @@ export class ChatComponent implements OnInit, OnDestroy {
         const element = this.chatContainer.nativeElement
         element.scrollTop = element.scrollHeight
       }, 200)
+      const latest = posts[posts.length - 1]
+      if (latest.level !== 0) {
+        const notification = new Notification(latest.name, {
+          renotify: true,
+          tag: 'new post',
+          body: latest.body,
+        })
+        notification.onclick = () => window.onclick
+      }
     })
   }
   ngOnInit() {}

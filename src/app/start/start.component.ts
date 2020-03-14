@@ -22,6 +22,13 @@ export class StartComponent implements OnInit {
   }
 
   ngOnInit() {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(result => {
+        if (result === 'denied') {
+          this.system.openSnack('設定により通知がブロックされています')
+        }
+      })
+    }
     console.log(name)
     console.log(this.name)
     this.version = this.system.version
