@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore'
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/database'
+import { database } from 'firebase'
 
 export interface Status {
   style: {
@@ -20,7 +21,7 @@ export interface Status {
 export interface Post {
   name: string
   group: string
-  timestamp: number
+  timestamp: number | Object
   body: string
   level: number
 }
@@ -56,7 +57,7 @@ export class SystemService {
       name: this.currentName,
       body: `${this.tableNames[this.currentTable]}グループに参加しました`,
       group: this.currentGroup,
-      timestamp: new Date().getTime(),
+      timestamp: database.ServerValue.TIMESTAMP,
       level: 0,
     }
     this.postRef = this.rdb.list<Post>('posts/' + this.currentGroup, ref =>
@@ -71,7 +72,7 @@ export class SystemService {
       name: this.currentName,
       body: `${this.tableNames[this.currentTable]}グループから離れました`,
       group: this.currentGroup,
-      timestamp: new Date().getTime(),
+      timestamp: database.ServerValue.TIMESTAMP,
       level: 0,
     })
   }
@@ -83,7 +84,7 @@ export class SystemService {
         name: this.currentName,
         body: `${this.tableNames[this.currentTable]}グループから離れました`,
         group: this.currentGroup,
-        timestamp: new Date().getTime(),
+        timestamp: database.ServerValue.TIMESTAMP,
         level: 0,
       })
     if (this.leaveRef) this.leaveRef.cancel()
