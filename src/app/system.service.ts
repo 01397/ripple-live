@@ -44,6 +44,20 @@ export class SystemService {
   private leaveRef?: firebase.database.OnDisconnect
   private snackText: string[] = []
   public configDialog: boolean = false
+  private _allowNotification: boolean = true
+  public get allowNotification() {
+    return this._allowNotification
+  }
+  public set allowNotification(val: boolean) {
+    if (val === false) return
+    Notification.requestPermission().then(result => {
+      if (result === 'denied') {
+        this.openSnack('設定により通知がブロックされています')
+      } else {
+        this._allowNotification = true
+      }
+    })
+  }
 
   constructor(db: AngularFirestore, public rdb: AngularFireDatabase) {
     this.statusDoc = db.doc<Status>('config/status')

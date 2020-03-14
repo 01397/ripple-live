@@ -7,5 +7,9 @@
   <select [(ngModel)]="skywayService.audioDevice">
     <option *ngFor="let device of audioDevices" [value]="device.deviceId">{{ device.label }}</option>
   </select>
-  <button (click)="closeConfig()">閉じる</button>
+  <h3>通知</h3>
+  <label><input type="checkbox" [(ngModel)]="systemService.allowNotification"></label>
+  <div>
+    <button (click)="closeConfig()">更新して閉じる</button>
+  </div>
 </div>

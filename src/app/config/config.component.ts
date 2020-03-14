@@ -10,7 +10,7 @@ import { SkywayService } from '../skyway.service'
 export class ConfigComponent implements OnInit {
   public audioDevices: MediaDeviceInfo[] = []
   public videoDevices: MediaDeviceInfo[] = []
-  constructor(private systemService: SystemService, public skywayService: SkywayService) {}
+  constructor(public systemService: SystemService, public skywayService: SkywayService) {}
 
   ngOnInit() {
     navigator.mediaDevices
